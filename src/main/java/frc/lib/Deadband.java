@@ -1,6 +1,8 @@
 package frc.lib;
 
 
+import edu.wpi.first.math.MathUtil;
+
 public class Deadband {
 
 	private final double deadBand; // The dead band range
@@ -12,11 +14,6 @@ public class Deadband {
 	}
 
 	public double apply(double input) {
-		if (Math.abs(input) > deadBand)
-		{
-			return input;
-		}else{
-			return defaultValue;
-		}
+		return MathUtil.applyDeadband(input,deadBand);
 	}
 }

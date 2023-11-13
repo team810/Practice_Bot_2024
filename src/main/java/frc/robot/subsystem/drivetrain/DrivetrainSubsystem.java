@@ -35,15 +35,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	private ChassisSpeeds targetAutoAlineSpeeds;
 	private ChassisSpeeds targetTeleopAutoAlineSpeeds;
 
-	private final SwerveModuleIO frontLeft;
-	private final SwerveModuleIO frontRight;
-	private final SwerveModuleIO backLeft;
-	private final SwerveModuleIO backRight;
-
-	private final ModuleDetails frontLeftDetails;
-	private final ModuleDetails frontRightDetails;
-	private final ModuleDetails backLeftDetails;
-	private final ModuleDetails backRightDetails;
+	private final SwerveModule frontLeft;
+	private final SwerveModule frontRight;
+	private final SwerveModule backLeft;
+	private final SwerveModule backRight;
 
 	private final SwerveDriveKinematics kinematics;
 	private final SwerveDriveOdometry odometry;
@@ -54,25 +49,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 	private DrivetrainSubsystem() {
 
-		frontLeftDetails = new ModuleDetails(FRONT_LEFT_MODULE_DRIVE_MOTOR, FRONT_LEFT_MODULE_STEER_MOTOR, FRONT_LEFT_MODULE_STEER_ENCODER, FRONT_LEFT_MODULE_STEER_OFFSET, ModuleEnum.frontLeft);
-		frontRightDetails = new ModuleDetails(FRONT_RIGHT_MODULE_DRIVE_MOTOR, FRONT_RIGHT_MODULE_STEER_MOTOR, FRONT_RIGHT_MODULE_STEER_ENCODER, FRONT_RIGHT_MODULE_STEER_OFFSET, ModuleEnum.frontRight);
-		backLeftDetails = new ModuleDetails(BACK_LEFT_MODULE_DRIVE_MOTOR, BACK_LEFT_MODULE_STEER_MOTOR, BACK_LEFT_MODULE_STEER_ENCODER, BACK_LEFT_MODULE_STEER_OFFSET, ModuleEnum.backLeft);
-		backRightDetails = new ModuleDetails(BACK_RIGHT_MODULE_DRIVE_MOTOR, BACK_RIGHT_MODULE_STEER_MOTOR, BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET, ModuleEnum.backRight);
+		SwerveModuleDetails frontLeftDetails = new SwerveModuleDetails(FRONT_LEFT_MODULE_DRIVE_MOTOR, FRONT_LEFT_MODULE_STEER_MOTOR, FRONT_LEFT_MODULE_STEER_ENCODER, FRONT_LEFT_MODULE_STEER_OFFSET, SwerveModuleEnum.frontLeft);
+		SwerveModuleDetails frontRightDetails = new SwerveModuleDetails(FRONT_RIGHT_MODULE_DRIVE_MOTOR, FRONT_RIGHT_MODULE_STEER_MOTOR, FRONT_RIGHT_MODULE_STEER_ENCODER, FRONT_RIGHT_MODULE_STEER_OFFSET, SwerveModuleEnum.frontRight);
+		SwerveModuleDetails backLeftDetails = new SwerveModuleDetails(BACK_LEFT_MODULE_DRIVE_MOTOR, BACK_LEFT_MODULE_STEER_MOTOR, BACK_LEFT_MODULE_STEER_ENCODER, BACK_LEFT_MODULE_STEER_OFFSET, SwerveModuleEnum.backLeft);
+		SwerveModuleDetails backRightDetails = new SwerveModuleDetails(BACK_RIGHT_MODULE_DRIVE_MOTOR, BACK_RIGHT_MODULE_STEER_MOTOR, BACK_RIGHT_MODULE_STEER_ENCODER, BACK_RIGHT_MODULE_STEER_OFFSET, SwerveModuleEnum.backRight);
+
+		frontLeft = new SwerveModule(frontLeftDetails);
+		frontRight = new SwerveModule(frontRightDetails);
+		backLeft = new SwerveModule(backLeftDetails);
+		backRight = new SwerveModule(backRightDetails);
 
 		if (Robot.isSimulation())
 		{
-			frontLeft = new SwerveModuleSim(frontLeftDetails);
-			frontRight = new SwerveModuleSim(frontRightDetails);
-			backLeft = new SwerveModuleSim(backLeftDetails);
-			backRight = new SwerveModuleSim(backRightDetails);
-
 			navx = new NavxSim();
-		}else {
-			frontLeft = new SwerveModuleReal(frontLeftDetails);
-			frontRight = new SwerveModuleReal(frontRightDetails);
-			backLeft = new SwerveModuleReal(backLeftDetails);
-			backRight = new SwerveModuleReal(backRightDetails);
-
+		}else{
 			navx = new NavxReal();
 		}
 

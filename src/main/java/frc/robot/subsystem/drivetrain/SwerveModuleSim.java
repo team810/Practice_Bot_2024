@@ -1,115 +1,98 @@
 package frc.robot.subsystem.drivetrain;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
-import com.revrobotics.REVPhysicsSim;
-import com.revrobotics.RelativeEncoder;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import frc.lib.CanCoderSim;
+import edu.wpi.first.wpilibj.simulation.FlywheelSim;
 import frc.lib.MoreMath;
 import frc.robot.Robot;
+import org.littletonrobotics.junction.Logger;
 
 public class SwerveModuleSim implements SwerveModuleIO {
+	private final FlywheelSim drive;
+	private final FlywheelSim steer;
 
-	private SwerveModuleState targetState; // this is where the module should be
-	private SwerveModuleState currentState; // this is the state with real values from the encoders
+	private double driveVoltage;
+	private double steerVoltage;
 
-	private final CANSparkMax drive;
+	private final SwerveModuleDetails details;
 
-	private final CanCoderSim steer_encoder;
-	private final RelativeEncoder drive_encoder;
+	/**
+	 * This is the speed of the wheel after the gear ratio in rpm
+	 */
+	private double wheelVelocity;
+	/**
+	 * Drive position is the distance that the wheel has traveled
+	 */
+	private double drivePosition;
+	/**
+	 * This is the angle that the wheel is currently at
+	 */
+	private Rotation2d steerPosition;
 
-	private final PIDController steer_controller;
+	public SwerveModuleSim(SwerveModuleDetails details) {
+		this.details = details;
 
-	private SwerveModulePosition modulePosition;
+		drive = new FlywheelSim(DCMotor.getNEO(1), 1, 0.025);
+		steer = new FlywheelSim(DCMotor.getNEO(1), 1, 0.004);
 
-	private SpeedMode speedMode;
+		driveVoltage = 0;
+		steerVoltage = 0;
 
-	public SwerveModuleSim(ModuleDetails details)
-	{
-		// General Init
-		targetState = new SwerveModuleState();
-		currentState = new SwerveModuleState();
-		modulePosition = new SwerveModulePosition();
-		speedMode = SpeedMode.normal;
+		drivePosition = 0;
+		wheelVelocity = 0;
+		steerPosition = new Rotation2d(0);
 
-		// Drive motor Init
-		drive = new CANSparkMax(details.driveID, CANSparkMaxLowLevel.MotorType.kBrushless);
-
-		REVPhysicsSim.getInstance().addSparkMax(drive, DCMotor.getNEO(1));
-
-		drive_encoder = drive.getEncoder();
-
-
-		// Steer motor init
-		steer_encoder = new CanCoderSim(details.encoderID, 0);
-		steer_controller = new PIDController(20,0,0);
-		steer_controller.setTolerance(.1);
-
-		steer_encoder.setRate(0);
-
-		steer_controller.enableContinuousInput(-Math.PI, Math.PI);
 	}
 
 	@Override
-	public void periodic() {
-		// set drive speed
-		if (speedMode == SpeedMode.slow)
-		{
-			drive.setVoltage(targetState.speedMetersPerSecond / DrivetrainConstants.SLOW_SPEED);
+	public void update() {
+		drive.update(Robot.defaultPeriodSecs);
+		steer.update(Robot.defaultPeriodSecs);
 
-		}
-		if (speedMode == SpeedMode.normal)
-		{
-			drive.setVoltage(targetState.speedMetersPerSecond / DrivetrainConstants.NORMAL_SPEED);
+		wheelVelocity = drive.getAngularVelocityRPM();
+		drivePosition =
+				(getWheelVelocity() / 6.75)* // This is the wheel gear ratio concision factor
+						((Math.PI* 4) / 12) // This is the conference in feet
+		;
+		drivePosition = MoreMath.toMeters(drivePosition); // This converts the feet into meters
 
-		}
-		// set steer speed
-		steer_encoder.setRate(
-						steer_controller.calculate(
-								steer_encoder.getRot().getRadians(), targetState.angle.getRadians()
-						));
+		double steerVelocity = steer.getAngularVelocityRPM() / (21.428571428571427); // This is the steer velocity of the wheel after the gear ratio is applied
+		steerPosition = steerPosition.rotateBy(new Rotation2d(steerVelocity/ (2 * Math.PI))); // This should be correct ? hopefully
 
-		steer_encoder.update(Robot.defaultPeriodSecs);
-		// update current state
-		double velocity = drive_encoder.getVelocity();
-		velocity = (velocity / DrivetrainConstants.GEAR_REDUCTION_DRIVE) / 60;
-		velocity = velocity * Math.PI * 4;
-		velocity = velocity / 12;
-		velocity = MoreMath.toMeters(velocity);
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelVelocity", getWheelVelocity());
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/DriveVoltage", driveVoltage);
+		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/DriveAmpDraw", drive.getCurrentDrawAmps());
 
-		currentState = new SwerveModuleState(velocity, steer_encoder.getRot());
-		// update module position
-		modulePosition = new SwerveModulePosition(MoreMath.toMeters(((drive_encoder.getPosition() / DrivetrainConstants.GEAR_REDUCTION_DRIVE) * Math.PI * 4) / 12), steer_encoder.getRot());
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/SteerVoltage", steerVoltage);
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getDegrees());
+		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerAmpDraw", steer.getCurrentDrawAmps());
+	}
 
+	@Override
+	public void setDriveVoltage(double voltage) {
+		driveVoltage = MathUtil.applyDeadband(MathUtil.clamp(voltage, -12, 12), 1);;
+	}
+	@Override
+	public void setSteerVoltage(double voltage) {
+		steerVoltage = MathUtil.applyDeadband(MathUtil.clamp(voltage, -12, 12), 1);
+		drive.setInputVoltage(voltage);
 	}
 
 
 	@Override
-	public SwerveModuleState getState() {
-		return currentState;
+	public Rotation2d getWheelAngle() {
+		return steerPosition;
 	}
 
 	@Override
-	public void resetModulePositions() {
-		modulePosition = new SwerveModulePosition();
+	public double getWheelPosition() {
+		return drivePosition;
 	}
 
 	@Override
-	public void setSpeedMode(SpeedMode mode) {
-		this.speedMode = mode;
+	public double getWheelVelocity() {
+		return drive.getAngularVelocityRPM();
 	}
 
-	@Override
-	public SwerveModulePosition getModulePosition() {
-		return modulePosition;
-	}
-
-	@Override
-	public void setState(SwerveModuleState state) {
-		targetState = state;
-	}
 }

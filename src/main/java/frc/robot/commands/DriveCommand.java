@@ -1,8 +1,8 @@
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.Deadband;
-import frc.lib.MoreMath;
 import frc.robot.IO.Controls;
 import frc.robot.IO.IO;
 import frc.robot.subsystem.drivetrain.DrivetrainConstants;
@@ -47,9 +47,9 @@ public class DriveCommand extends CommandBase {
 			y = y * DrivetrainConstants.NORMAL_SPEED;
 			theta = theta * DrivetrainConstants.NORMAL_SPEED;
 
-			x = MoreMath.minMax(x, DrivetrainConstants.NORMAL_SPEED, -DrivetrainConstants.NORMAL_SPEED);
-			y = MoreMath.minMax(y, DrivetrainConstants.NORMAL_SPEED, -DrivetrainConstants.NORMAL_SPEED);
-			theta = MoreMath.minMax(theta, DrivetrainConstants.NORMAL_SPEED, -DrivetrainConstants.NORMAL_SPEED);
+			x = MathUtil.clamp(x, -DrivetrainConstants.NORMAL_SPEED, DrivetrainConstants.NORMAL_SPEED);
+			y = MathUtil.clamp(y, -DrivetrainConstants.NORMAL_SPEED, DrivetrainConstants.NORMAL_SPEED);
+			theta = MathUtil.clamp(theta, -DrivetrainConstants.NORMAL_SPEED, DrivetrainConstants.NORMAL_SPEED);
 		}
 		if (DrivetrainSubsystem.getInstance().getSpeedMode() == SpeedMode.slow)
 		{
@@ -57,9 +57,9 @@ public class DriveCommand extends CommandBase {
 			y = y * DrivetrainConstants.SLOW_SPEED;
 			theta = theta * DrivetrainConstants.SLOW_SPEED;
 
-			x = MoreMath.minMax(x, DrivetrainConstants.SLOW_SPEED, -DrivetrainConstants.SLOW_SPEED);
-			y = MoreMath.minMax(y, DrivetrainConstants.SLOW_SPEED, -DrivetrainConstants.SLOW_SPEED);
-			theta = MoreMath.minMax(theta, DrivetrainConstants.SLOW_SPEED, -DrivetrainConstants.SLOW_SPEED);
+			x = MathUtil.clamp(x, -DrivetrainConstants.SLOW_SPEED, DrivetrainConstants.SLOW_SPEED);
+			y = MathUtil.clamp(y, -DrivetrainConstants.SLOW_SPEED, DrivetrainConstants.SLOW_SPEED);
+			theta = MathUtil.clamp(theta, -DrivetrainConstants.SLOW_SPEED, DrivetrainConstants.SLOW_SPEED);
 		}
 
 

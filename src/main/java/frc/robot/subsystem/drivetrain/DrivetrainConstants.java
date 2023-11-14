@@ -1,5 +1,6 @@
 package frc.robot.subsystem.drivetrain;
 
+import com.pathplanner.lib.auto.PIDConstants;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 
@@ -33,6 +34,11 @@ public final class DrivetrainConstants {
 
 	public static final double GEAR_REDUCTION_DRIVE = 8.14;
 
+	public static final PIDConstants STEER_CONTROLLER_SIM = new PIDConstants(0,0,0);
+	public static final PIDConstants DRIVE_CONTROLLER_SIM = new PIDConstants(0,0,0);
+
+	public static final PIDConstants STEER_CONTROLLER_REAL = new PIDConstants(0,0,0);
+	public static final PIDConstants DRIVE_CONTROLLER_REAL = new PIDConstants(0,0,0);
 
 	public static final SwerveDriveKinematics KINEMATICS = new SwerveDriveKinematics(
 			// Front left

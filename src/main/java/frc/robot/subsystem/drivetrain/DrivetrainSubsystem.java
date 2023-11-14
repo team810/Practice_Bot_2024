@@ -111,7 +111,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		}
 
 		SwerveModuleState[] states = kinematics.toSwerveModuleStates(
-				ChassisSpeeds.fromFieldRelativeSpeeds(targetSpeed, navx.getRotation2d())
+				ChassisSpeeds.fromFieldRelativeSpeeds(targetSpeed, new Rotation2d())
 		);
 
 		states[0] = SwerveModuleState.optimize(states[0], frontLeft.getState().angle);

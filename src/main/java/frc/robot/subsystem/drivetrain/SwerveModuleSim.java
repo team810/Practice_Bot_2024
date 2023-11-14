@@ -17,24 +17,18 @@ public class SwerveModuleSim implements SwerveModuleIO {
 
 	private final SwerveModuleDetails details;
 
-	/**
-	 * This is the speed of the wheel after the gear ratio in rpm
-	 */
+	/**This is the speed of the wheel after the gear ratio in rpm*/
 	private double wheelVelocity;
-	/**
-	 * Drive position is the distance that the wheel has traveled
-	 */
+	/**Drive position is the distance that the wheel has traveled*/
 	private double drivePosition;
-	/**
-	 * This is the angle that the wheel is currently at
-	 */
+	/**This is the angle that the wheel is currently at*/
 	private Rotation2d steerPosition;
 
 	public SwerveModuleSim(SwerveModuleDetails details) {
 		this.details = details;
 
-		drive = new FlywheelSim(DCMotor.getNEO(1), 1, 0.025);
-		steer = new FlywheelSim(DCMotor.getNEO(1), 1, 0.004);
+		drive = new FlywheelSim(DCMotor.getNEO(1), 1, 0.001);
+		steer = new FlywheelSim(DCMotor.getNEO(1), 150/7.0, 0.004);
 
 		driveVoltage = 0;
 		steerVoltage = 0;
@@ -42,41 +36,47 @@ public class SwerveModuleSim implements SwerveModuleIO {
 		drivePosition = 0;
 		wheelVelocity = 0;
 		steerPosition = new Rotation2d(0);
-
 	}
 
 	@Override
 	public void update() {
+		drive.setInputVoltage(driveVoltage);
+		steer.setInputVoltage(steerVoltage);
+
 		drive.update(Robot.defaultPeriodSecs);
 		steer.update(Robot.defaultPeriodSecs);
 
 		wheelVelocity = drive.getAngularVelocityRPM();
 		drivePosition =
-				(getWheelVelocity() / 6.75)* // This is the wheel gear ratio concision factor
+				(getWheelVelocity() / DrivetrainConstants.GEAR_REDUCTION_DRIVE)* // This is the wheel gear ratio concision factor
 						((Math.PI* 4) / 12) // This is the conference in feet
 		;
 		drivePosition = MoreMath.toMeters(drivePosition); // This converts the feet into meters
 
-		double steerVelocity = steer.getAngularVelocityRPM() / (21.428571428571427); // This is the steer velocity of the wheel after the gear ratio is applied
-		steerPosition = steerPosition.rotateBy(new Rotation2d(steerVelocity/ (2 * Math.PI))); // This should be correct ? hopefully
+		double steerVelocity = steer.getAngularVelocityRadPerSec(); // This is the steer velocity of the wheel after the gear ratio is applied
+		steerVelocity = Rotation2d.fromRotations(steerVelocity * Robot.defaultPeriodSecs).getRadians(); // Converting from rotations per second to radians per second
+		steerPosition = Rotation2d.fromRadians(MathUtil.angleModulus(steerPosition.getRadians() + steerVelocity));
 
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelVelocity", getWheelVelocity());
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/DriveVoltage", driveVoltage);
 		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/DriveAmpDraw", drive.getCurrentDrawAmps());
 
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/SteerVoltage", steerVoltage);
-		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getDegrees());
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getRadians());
 		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerAmpDraw", steer.getCurrentDrawAmps());
 	}
 
 	@Override
 	public void setDriveVoltage(double voltage) {
-		driveVoltage = MathUtil.applyDeadband(MathUtil.clamp(voltage, -12, 12), 1);;
+		driveVoltage = MathUtil.clamp(voltage, -12, 12);
+		driveVoltage = MathUtil.applyDeadband((driveVoltage / 12), .01);
+		driveVoltage = driveVoltage * 12;
 	}
 	@Override
 	public void setSteerVoltage(double voltage) {
-		steerVoltage = MathUtil.applyDeadband(MathUtil.clamp(voltage, -12, 12), 1);
-		drive.setInputVoltage(voltage);
+		steerVoltage = MathUtil.clamp(voltage, -12, 12);
+		steerVoltage = MathUtil.applyDeadband((steerVoltage / 12), .1);
+		steerVoltage = steerVoltage * 12;
 	}
 
 
@@ -94,5 +94,4 @@ public class SwerveModuleSim implements SwerveModuleIO {
 	public double getWheelVelocity() {
 		return drive.getAngularVelocityRPM();
 	}
-
 }

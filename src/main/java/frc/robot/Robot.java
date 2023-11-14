@@ -8,6 +8,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LoggedRobot;
+import org.littletonrobotics.junction.Logger;
+import org.littletonrobotics.junction.networktables.NT4Publisher;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 public class Robot extends LoggedRobot
 {
@@ -18,6 +21,16 @@ public class Robot extends LoggedRobot
     @Override
     public void robotInit()
     {
+        Logger.getInstance().recordMetadata("ProjectName", "Off_season"); // Set a metadata value
+        if (isReal()) {
+            Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+            Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        } else {
+            // Regular sim
+            Logger.getInstance().addDataReceiver(new WPILOGWriter("../logData")); // Log to a USB stick
+            Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+        }
+        Logger.getInstance().start();
 
         robotContainer = new RobotContainer();
     }

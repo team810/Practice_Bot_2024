@@ -54,5 +54,4 @@ public final class DrivetrainConstants {
 			new Translation2d(-DrivetrainConstants.DRIVETRAIN_TRACK_WIDTH_METERS / 2.0,
 					-DrivetrainConstants.DRIVETRAIN_WHEELBASE_METERS / 2.0));
 
-
 }

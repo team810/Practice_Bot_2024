@@ -11,7 +11,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.Logger;
 
 public class SwerveModuleRev implements SwerveModuleIO {
-
 	private final CANSparkMax drive;
 	private final CANSparkMax steer;
 
@@ -24,14 +23,14 @@ public class SwerveModuleRev implements SwerveModuleIO {
 
 	public SwerveModuleRev(SwerveModuleDetails details)
 	{
-
 		drive = new CANSparkMax(details.driveID, CANSparkMaxLowLevel.MotorType.kBrushless);
 		steer = new CANSparkMax(details.steerID, CANSparkMaxLowLevel.MotorType.kBrushless);
+		
 		canCoder = new CANCoder(details.encoderID);
 		this.details = details;
 
 		drive.setSmartCurrentLimit(40);
-		steer.setSmartCurrentLimit(30);
+		steer.setSmartCurrentLimit(20);
 
 		drive.enableVoltageCompensation(12.0);
 		steer.enableVoltageCompensation(12.0);
@@ -44,6 +43,9 @@ public class SwerveModuleRev implements SwerveModuleIO {
 		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus4, 200);
 		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus5, 200);
 		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus6, 200);
+
+		drive.setIdleMode(CANSparkMax.IdleMode.kBrake);
+		steer.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
 		drive_encoder = drive.getEncoder();
 

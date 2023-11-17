@@ -12,9 +12,9 @@ import frc.robot.subsystem.drivetrain.SpeedMode;
 
 public class DriveCommand extends CommandBase {
 
-    private final Deadband xDeadband = new Deadband(.05,0);
+	private final Deadband xDeadband = new Deadband(.05,0);
 	private final Deadband yDeadband = new Deadband(.05,0);
-    private final Deadband thetaDeadband = new Deadband(.05,0);
+	private final Deadband thetaDeadband = new Deadband(.05,0);
 
 	public DriveCommand() {
 		addRequirements(DrivetrainSubsystem.getInstance());
@@ -37,9 +37,9 @@ public class DriveCommand extends CommandBase {
 		y = yDeadband.apply(y);
 		theta = thetaDeadband.apply(theta);
 
-        x = Math.pow(x,3);
-        y = Math.pow(y,3);
-        theta = Math.pow(theta,3);
+		x = Math.pow(x,3);
+		y = Math.pow(y,3);
+		theta = Math.pow(theta,3);
 
 		if (DrivetrainSubsystem.getInstance().getSpeedMode() == SpeedMode.normal)
 		{
@@ -63,11 +63,11 @@ public class DriveCommand extends CommandBase {
 		}
 
 
-        DrivetrainSubsystem.getInstance().setTargetTeleopSpeeds(
-                x,
-                y,
-                theta
-        );
+		DrivetrainSubsystem.getInstance().setTargetTeleopSpeeds(
+				x,
+				y,
+				theta
+		);
 
 		// Button Input
 

@@ -2,7 +2,6 @@ package frc.robot.subsystem.drivetrain;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.lib.GlobalConstants;
@@ -14,7 +13,6 @@ public class SwerveModule {
 
     private final PIDController driveController;
     private final PIDController steerController;
-    private final SimpleMotorFeedforward driveFF;
 
     private SwerveModuleState state;
     private SwerveModulePosition position;
@@ -25,8 +23,7 @@ public class SwerveModule {
     public SwerveModule(SwerveModuleDetails details)
     {
         driveController = new PIDController(0.035,0,0);
-        driveController.setTolerance(100,100);
-        driveFF = new SimpleMotorFeedforward(.116970,.133240);
+        driveController.setTolerance(10);
 
         steerController = new PIDController(3,3,1);
         steerController.setTolerance(.01);
@@ -59,8 +56,7 @@ public class SwerveModule {
         speedOfMotorRPM = speedOfMotorRPM * GlobalConstants.NEO_MAX_RPM;
 
         module.setDriveVoltage(
-                driveController.calculate(module.getWheelVelocity(), speedOfMotorRPM) +
-                driveFF.calculate(speedOfMotorRPM)
+                driveController.calculate(module.getWheelVelocity(), speedOfMotorRPM)
         );
         module.setSteerVoltage(
                 steerController.calculate(MathUtil.angleModulus(module.getWheelAngle().getRadians()), MathUtil.angleModulus(state.angle.getRadians()))

@@ -94,6 +94,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	public void periodic() {
 
 		ChassisSpeeds targetSpeed = new ChassisSpeeds();
+
 		switch (mode)
 		{
 			case teleop:
@@ -191,7 +192,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		this.mode = mode;
 	}
 
-
 	/**
 	 * @param x this is the x input
 	 * @param y this is the y input
@@ -212,7 +212,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	{
 		targetAutoSpeeds = new ChassisSpeeds(x,y,z);
 	}
-
 	public void setTargetAutoSpeeds(ChassisSpeeds speeds)
 	{
 		targetAutoSpeeds = speeds;
@@ -224,11 +223,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	public ChassisSpeeds getTargetTeleopSpeeds() {
 		return targetTeleopSpeeds;
 	}
-
 	public void setTargetTeleopSpeeds(ChassisSpeeds mTargetTeleopSpeeds) {
 		targetTeleopSpeeds = mTargetTeleopSpeeds;
 	}
-
 	public ChassisSpeeds getTargetAutoSpeeds() {
 		return targetAutoSpeeds;
 	}
@@ -240,11 +237,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		backLeft.setSpeedMode(this.speedMode);
 		backRight.setSpeedMode(this.speedMode);
 	}
-
 	public SpeedMode getSpeedMode() {
 		return speedMode;
 	}
-
 	public static DrivetrainSubsystem getInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new DrivetrainSubsystem();

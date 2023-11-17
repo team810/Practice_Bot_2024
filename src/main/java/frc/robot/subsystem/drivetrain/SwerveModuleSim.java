@@ -79,7 +79,6 @@ public class SwerveModuleSim implements SwerveModuleIO {
 		steerVoltage = steerVoltage * 12;
 	}
 
-
 	@Override
 	public Rotation2d getWheelAngle() {
 		return steerPosition;

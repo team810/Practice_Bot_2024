@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.Deadband;
 import frc.robot.IO.Controls;
@@ -12,9 +13,17 @@ import frc.robot.subsystem.drivetrain.SpeedMode;
 
 public class DriveCommand extends CommandBase {
 
-	private final Deadband xDeadband = new Deadband(.05,0);
-	private final Deadband yDeadband = new Deadband(.05,0);
-	private final Deadband thetaDeadband = new Deadband(.05,0);
+	private final Deadband xDeadband = new Deadband(.05);
+	private final Deadband yDeadband = new Deadband(.05);
+	private final Deadband thetaDeadband = new Deadband(.05);
+
+	/**
+	 * The Slew Rate Limiter is applied when the input is between -1 and 1.
+	 * If the slew rate is 1 that means that it will take 1 second to get to 1 if it was 2 this would mean it would take 1 second to get to 2
+	 */
+	private final SlewRateLimiter xSlewRate = new SlewRateLimiter(1,1,0);
+	private final SlewRateLimiter ySlewRate = new SlewRateLimiter(1,1,0);
+	private final SlewRateLimiter thetaSlewRate = new SlewRateLimiter(1,1,0);
 
 	public DriveCommand() {
 		addRequirements(DrivetrainSubsystem.getInstance());
@@ -32,6 +41,10 @@ public class DriveCommand extends CommandBase {
 		x = -IO.getJoystickValue(Controls.drive_x).get();
 		y = -IO.getJoystickValue(Controls.drive_y).get();
 		theta = -IO.getJoystickValue(Controls.drive_theta).get();
+
+		x = xSlewRate.calculate(x);
+		y = ySlewRate.calculate(x);
+		theta = thetaSlewRate.calculate(x);
 
 		x = xDeadband.apply(x);
 		y = yDeadband.apply(y);
@@ -69,7 +82,6 @@ public class DriveCommand extends CommandBase {
 				theta
 		);
 
-		// Button Input
 
 		if (IO.getButtonValue(Controls.reset_gyro).get())
 		{

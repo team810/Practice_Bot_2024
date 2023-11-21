@@ -12,7 +12,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
-public abstract class Robot extends LoggedRobot
+public class Robot extends LoggedRobot
 {
     private Command autonomousCommand;
     

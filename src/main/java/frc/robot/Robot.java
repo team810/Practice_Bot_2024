@@ -24,11 +24,9 @@ public class Robot extends LoggedRobot
         Logger.getInstance().recordMetadata("ProjectName", "Off_season"); // Set a metadata value
         if (isReal()) {
             Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
-            Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+            Logger.getInstance().addDataReceiver(new NT4Publisher());
         } else {
-            // Regular sim
-            Logger.getInstance().addDataReceiver(new WPILOGWriter("../logData")); // Log to a USB stick
-            Logger.getInstance().addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+            Logger.getInstance().addDataReceiver(new NT4Publisher());
         }
         Logger.getInstance().start();
 

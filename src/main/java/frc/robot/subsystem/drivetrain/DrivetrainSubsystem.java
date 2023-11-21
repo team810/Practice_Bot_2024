@@ -4,6 +4,7 @@ package frc.robot.subsystem.drivetrain;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.lib.navx.Navx;
 import frc.lib.navx.NavxReal;
@@ -14,7 +15,8 @@ import org.littletonrobotics.junction.Logger;
 import static frc.robot.subsystem.drivetrain.DrivetrainConstants.*;
 
 public class DrivetrainSubsystem extends SubsystemBase {
-	private static DrivetrainSubsystem INSTANCE;
+	private static final DrivetrainSubsystem INSTANCE = new DrivetrainSubsystem();
+	public static DrivetrainSubsystem getInstance() {return INSTANCE;}
 
 	private DrivetrainMode mode;
 
@@ -109,6 +111,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 			case auto_autoAline:
 				targetSpeed = targetAutoAlineSpeeds;
 				break;
+			default:
+				throw new RuntimeException("Triggered a default state, IDK how you did this get help from Matthew, " +
+						"This will be funny when I eventually adjacently make the error");
 		}
 
 		SwerveModuleState[] states = kinematics.toSwerveModuleStates(
@@ -239,11 +244,5 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	}
 	public SpeedMode getSpeedMode() {
 		return speedMode;
-	}
-	public static DrivetrainSubsystem getInstance() {
-		if (INSTANCE == null) {
-			INSTANCE = new DrivetrainSubsystem();
-		}
-		return INSTANCE;
 	}
 }

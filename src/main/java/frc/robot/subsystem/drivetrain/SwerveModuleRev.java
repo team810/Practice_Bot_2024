@@ -50,9 +50,11 @@ public class SwerveModuleRev implements SwerveModuleIO {
 		drive_encoder = drive.getEncoder();
 
 		CANCoderConfiguration configuration = new CANCoderConfiguration();
+
 		// Encoder Configuration
 		configuration.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
 		configuration.magnetOffsetDegrees = details.encoderOffset;
+
 
 		canCoder.configAllSettings(configuration);
 

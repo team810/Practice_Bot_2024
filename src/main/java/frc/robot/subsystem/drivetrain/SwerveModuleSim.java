@@ -47,17 +47,20 @@ public class SwerveModuleSim implements SwerveModuleIO {
 		steer.update(Robot.defaultPeriodSecs);
 
 		wheelVelocity = drive.getAngularVelocityRPM();
-		drivePosition =
-				(getWheelVelocity() / DrivetrainConstants.GEAR_REDUCTION_DRIVE)* // This is the wheel gear ratio concision factor
-						((Math.PI* 4) / 12) // This is the conference in feet
+		double currentSpeed =
+				(((getWheelVelocity() / DrivetrainConstants.GEAR_REDUCTION_DRIVE) / 60 ) * // This is the wheel gear ratio concision factor
+						((Math.PI* 4) / 12) * Robot.defaultPeriodSecs )
 		;
-		drivePosition = MoreMath.toMeters(drivePosition); // This converts the feet into meters
+
+		drivePosition = MoreMath.toMeters(currentSpeed) + drivePosition;
 
 		double steerVelocity = steer.getAngularVelocityRadPerSec(); // This is the steer velocity of the wheel after the gear ratio is applied
 		steerVelocity = Rotation2d.fromRotations(steerVelocity * Robot.defaultPeriodSecs).getRadians(); // Converting from rotations per second to radians per second
 		steerPosition = Rotation2d.fromRadians(MathUtil.angleModulus(steerPosition.getRadians() + steerVelocity));
 
-		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelVelocity", getWheelVelocity());
+		wheelVelocity = drive.getAngularVelocityRPM();
+
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelVelocity", wheelVelocity);
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/DriveVoltage", driveVoltage);
 		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/DriveAmpDraw", drive.getCurrentDrawAmps());
 
@@ -69,13 +72,13 @@ public class SwerveModuleSim implements SwerveModuleIO {
 	@Override
 	public void setDriveVoltage(double voltage) {
 		driveVoltage = MathUtil.clamp(voltage, -12, 12);
-		driveVoltage = MathUtil.applyDeadband((driveVoltage / 12), .01);
+		driveVoltage = MathUtil.applyDeadband((driveVoltage / 12), .001);
 		driveVoltage = driveVoltage * 12;
 	}
 	@Override
 	public void setSteerVoltage(double voltage) {
 		steerVoltage = MathUtil.clamp(voltage, -12, 12);
-		steerVoltage = MathUtil.applyDeadband((steerVoltage / 12), .1);
+		steerVoltage = MathUtil.applyDeadband((steerVoltage / 12), .001);
 		steerVoltage = steerVoltage * 12;
 	}
 
@@ -91,6 +94,6 @@ public class SwerveModuleSim implements SwerveModuleIO {
 
 	@Override
 	public double getWheelVelocity() {
-		return drive.getAngularVelocityRPM();
+		return wheelVelocity;
 	}
 }

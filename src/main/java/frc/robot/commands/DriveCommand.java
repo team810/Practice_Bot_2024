@@ -11,11 +11,14 @@ import frc.robot.subsystem.drivetrain.DrivetrainSubsystem;
 import frc.robot.subsystem.drivetrain.SpeedMode;
 
 
+/**
+ * The drive train command is meant to handle drivetrain inputs in telop
+ */
 public class DriveCommand extends CommandBase {
 
-	private final Deadband xDeadband = new Deadband(.05);
-	private final Deadband yDeadband = new Deadband(.05);
-	private final Deadband thetaDeadband = new Deadband(.05);
+	private final Deadband xDeadband = new Deadband(.1);
+	private final Deadband yDeadband = new Deadband(.1);
+	private final Deadband thetaDeadband = new Deadband(.1);
 
 	/**
 	 * The Slew Rate Limiter is applied when the input is between -1 and 1.
@@ -42,9 +45,9 @@ public class DriveCommand extends CommandBase {
 		y = -IO.getJoystickValue(Controls.drive_y).get();
 		theta = -IO.getJoystickValue(Controls.drive_theta).get();
 
-		x = xSlewRate.calculate(x);
-		y = ySlewRate.calculate(x);
-		theta = thetaSlewRate.calculate(x);
+//		x = xSlewRate.calculate(x);
+//		y = ySlewRate.calculate(x);
+//		theta = thetaSlewRate.calculate(x);
 
 		x = xDeadband.apply(x);
 		y = yDeadband.apply(y);

@@ -95,7 +95,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	@Override
 	public void periodic() {
 
-		ChassisSpeeds targetSpeed = new ChassisSpeeds();
+		ChassisSpeeds targetSpeed;
 
 		switch (mode)
 		{
@@ -116,14 +116,21 @@ public class DrivetrainSubsystem extends SubsystemBase {
 						"This will be funny when I eventually adjacently make the error");
 		}
 
+		if (RobotState.isDisabled())
+		{
+			targetSpeed = new ChassisSpeeds(0,0,0);
+		}
+
 		SwerveModuleState[] states = kinematics.toSwerveModuleStates(
-				ChassisSpeeds.fromFieldRelativeSpeeds(targetSpeed, new Rotation2d())
+				ChassisSpeeds.fromFieldRelativeSpeeds(targetSpeed, getRotation())
 		);
 
-		states[0] = SwerveModuleState.optimize(states[0], frontLeft.getState().angle);
-		states[1] = SwerveModuleState.optimize(states[1], frontRight.getState().angle);
-		states[2] = SwerveModuleState.optimize(states[2], backLeft.getState().angle);
-		states[3] = SwerveModuleState.optimize(states[3], backRight.getState().angle);
+
+		// This mess with the pid controllers
+//		states[0] = SwerveModuleState.optimize(states[0], frontLeft.getState().angle);
+//		states[1] = SwerveModuleState.optimize(states[1], frontRight.getState().angle);
+//		states[2] = SwerveModuleState.optimize(states[2], backLeft.getState().angle);
+//		states[3] = SwerveModuleState.optimize(states[3], backRight.getState().angle);
 
 		frontLeft.setState(states[0]);
 		frontRight.setState(states[1]);

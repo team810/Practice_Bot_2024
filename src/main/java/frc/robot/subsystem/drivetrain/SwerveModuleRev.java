@@ -23,6 +23,7 @@ public class SwerveModuleRev implements SwerveModuleIO {
 
 	public SwerveModuleRev(SwerveModuleDetails details)
 	{
+
 		drive = new CANSparkMax(details.driveID, CANSparkMaxLowLevel.MotorType.kBrushless);
 		steer = new CANSparkMax(details.steerID, CANSparkMaxLowLevel.MotorType.kBrushless);
 		
@@ -55,7 +56,6 @@ public class SwerveModuleRev implements SwerveModuleIO {
 		configuration.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
 		configuration.magnetOffsetDegrees = details.encoderOffset;
 
-
 		canCoder.configAllSettings(configuration);
 
 		driveVoltage = 0;
@@ -66,10 +66,12 @@ public class SwerveModuleRev implements SwerveModuleIO {
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelVelocity", getWheelVelocity());
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/DriveVoltage", driveVoltage);
 		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/DriveAmpDraw", drive.getOutputCurrent());
+		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/DriveTemperature", drive.getMotorTemperature());
 
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/SteerVoltage", steerVoltage);
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getDegrees());
 		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerAmpDraw", drive.getOutputCurrent());
+		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerTemperature", steer.getMotorTemperature());
 	}
 
 	@Override

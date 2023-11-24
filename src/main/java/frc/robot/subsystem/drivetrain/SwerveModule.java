@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.RobotState;
 import frc.lib.GlobalConstants;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
@@ -22,12 +23,39 @@ public class SwerveModule {
 
     public SwerveModule(SwerveModuleDetails details)
     {
-        driveController = new PIDController(0.035,0,0);
+        driveController = new PIDController(0,0,0);
         driveController.setTolerance(10);
 
-        steerController = new PIDController(3,3,1);
-        steerController.setTolerance(.01);
+        steerController = new PIDController(0,0,0);
         steerController.enableContinuousInput(-Math.PI, Math.PI);
+
+        if (Robot.isReal())
+        {
+            driveController.setP(DrivetrainConstants.DRIVE_CONTROLLER_REAL.kP);
+            driveController.setI(DrivetrainConstants.DRIVE_CONTROLLER_REAL.kI);
+            driveController.setD(DrivetrainConstants.DRIVE_CONTROLLER_REAL.kD);
+
+            steerController.setP(DrivetrainConstants.STEER_CONTROLLER_REAL.kP);
+            steerController.setI(DrivetrainConstants.STEER_CONTROLLER_REAL.kI);
+            steerController.setD(DrivetrainConstants.STEER_CONTROLLER_REAL.kD);
+        } else if (Robot.isSimulation()) {
+
+            driveController.setP(DrivetrainConstants.DRIVE_CONTROLLER_SIM.kP);
+            driveController.setI(DrivetrainConstants.DRIVE_CONTROLLER_SIM.kI);
+            driveController.setD(DrivetrainConstants.DRIVE_CONTROLLER_SIM.kD);
+
+            steerController.setP(DrivetrainConstants.STEER_CONTROLLER_SIM.kP);
+            steerController.setI(DrivetrainConstants.STEER_CONTROLLER_SIM.kI);
+            steerController.setD(DrivetrainConstants.DRIVE_CONTROLLER_SIM.kD);
+        }else{
+            throw new RuntimeException(
+                    "The PID controls for both the drive controller " +
+                    "and the steer controllers are not getting configured, " +
+                    "how is the robot not real or simulated"
+            );
+        }
+
+        steerController.setTolerance(.01);
 
         position = new SwerveModulePosition();
 
@@ -42,11 +70,12 @@ public class SwerveModule {
 
         this.details = details;
     }
+
     void periodic(){
         module.update();
 
         double speedOfMotorRPM = state.speedMetersPerSecond;
-        
+
         if (mode == SpeedMode.slow)
         {
             speedOfMotorRPM = speedOfMotorRPM / DrivetrainConstants.SLOW_SPEED;
@@ -61,11 +90,21 @@ public class SwerveModule {
         module.setSteerVoltage(
                 steerController.calculate(MathUtil.angleModulus(module.getWheelAngle().getRadians()), MathUtil.angleModulus(state.angle.getRadians()))
         );
-
-
         Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/TargetVelocity", speedOfMotorRPM);
         Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/TargetAngle", state.angle.getRadians());
         Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/AtAngleSetpoint", steerController.atSetpoint());
+        Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/IbuildUp", steerController.getPeriod());
+
+
+        if (RobotState.isDisabled())
+        {
+            steerController.reset();
+
+            driveController.reset();
+
+        }
+
+        position = new SwerveModulePosition(module.getWheelPosition(),module.getWheelAngle());
     }
 
     void setState(SwerveModuleState state)

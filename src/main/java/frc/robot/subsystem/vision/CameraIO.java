@@ -1,5 +1,6 @@
 package frc.robot.subsystem.vision;
 
+import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public interface CameraIO {
@@ -10,4 +11,6 @@ public interface CameraIO {
     public PhotonPipelineResult getResults();
 
     public void update();
+
+    public PhotonCamera getCamera();
 }

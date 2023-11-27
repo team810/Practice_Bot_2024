@@ -15,4 +15,9 @@ public interface SwerveModuleIO {
 	double getWheelPosition();
 	/**This function needs to be called periodically to ensure that the sim is periodically updated and this function also logs data.*/
 	void update();
+
+	/**
+	 * This resets the wheel distence traveled
+	 */
+	 void resetPosition();
 }

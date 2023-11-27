@@ -170,11 +170,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		Logger.getInstance().recordOutput("Drivetrain/states", frontLeftState, frontRightState, backLeftState, backRightState);
 		Logger.getInstance().recordOutput("Drivetrain/gyro" ,getRotation().getRadians());
 		Logger.getInstance().recordOutput("RobotPose", getPose());
+
 	}
 
 	public void resetOdometry(Pose2d newPose)
 	{
-		navx.zeroYaw();
 
 		frontLeft.resetModulePositions();
 		frontRight.resetModulePositions();

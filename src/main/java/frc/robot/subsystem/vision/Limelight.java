@@ -54,6 +54,11 @@ public class Limelight implements CameraIO
     }
 
     @Override
+    public PhotonCamera getCamera() {
+        return limelight;
+    }
+
+    @Override
     public CameraMode getCurrentCameraMode() {
         return mode;
     }

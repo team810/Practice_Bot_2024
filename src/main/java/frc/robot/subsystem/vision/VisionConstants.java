@@ -11,5 +11,4 @@ public class VisionConstants {
     public static final int COLORED_SHAPE_INDEX = 2;
 
     public static final Transform3d LIME_LIGHT_POSITION = new Transform3d(new Translation3d(), new Rotation3d());
-
 }

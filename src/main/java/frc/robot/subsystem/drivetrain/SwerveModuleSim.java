@@ -24,6 +24,7 @@ public class SwerveModuleSim implements SwerveModuleIO {
 	/**This is the angle that the wheel is currently at*/
 	private Rotation2d steerPosition;
 
+
 	public SwerveModuleSim(SwerveModuleDetails details) {
 		this.details = details;
 
@@ -67,6 +68,12 @@ public class SwerveModuleSim implements SwerveModuleIO {
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/SteerVoltage", steerVoltage);
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getRadians());
 		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerAmpDraw", steer.getCurrentDrawAmps());
+
+	}
+
+	@Override
+	public void resetPosition() {
+		drivePosition = 0;
 	}
 
 	@Override

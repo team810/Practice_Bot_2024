@@ -74,7 +74,12 @@ public class SwerveModuleRev implements SwerveModuleIO {
 		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerTemperature", steer.getMotorTemperature());
 	}
 
-	@Override
+    @Override
+    public void resetPosition() {
+		drive_encoder.setPosition(0);
+    }
+
+    @Override
 	public void setDriveVoltage(double voltage) {
 		driveVoltage = MathUtil.applyDeadband(MathUtil.clamp(voltage, -12, 12), 1);
 		drive.setVoltage(driveVoltage);

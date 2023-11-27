@@ -93,8 +93,6 @@ public class SwerveModule {
         Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/TargetVelocity", speedOfMotorRPM);
         Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/TargetAngle", state.angle.getRadians());
         Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/AtAngleSetpoint", steerController.atSetpoint());
-        Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/IbuildUp", steerController.getPeriod());
-
 
         if (RobotState.isDisabled())
         {
@@ -114,6 +112,7 @@ public class SwerveModule {
 
     void resetModulePositions()
     {
+        module.resetPosition();
         position = new SwerveModulePosition();
     }
 

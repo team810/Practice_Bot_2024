@@ -5,4 +5,5 @@ public enum DrivetrainMode {
 	teleop_autoAline,
 	auto,
 	auto_autoAline,
+	telop_auto_turn,
 }

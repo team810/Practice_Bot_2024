@@ -1,5 +1,6 @@
 package frc.robot.subsystem.drivetrain;
 
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -71,6 +72,10 @@ public class SwerveModule {
         this.details = details;
     }
 
+    public void setIdleMode(CANSparkMax.IdleMode mode)
+    {
+
+    }
     void periodic(){
         module.update();
 

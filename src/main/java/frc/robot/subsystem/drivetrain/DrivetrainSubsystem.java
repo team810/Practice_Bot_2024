@@ -1,6 +1,7 @@
 package frc.robot.subsystem.drivetrain;
 
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
@@ -13,6 +14,7 @@ import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
 import static frc.robot.subsystem.drivetrain.DrivetrainConstants.*;
+
 
 public class DrivetrainSubsystem extends SubsystemBase {
 	private static final DrivetrainSubsystem INSTANCE = new DrivetrainSubsystem();
@@ -49,6 +51,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 	private SpeedMode speedMode;
 
+	private final PIDController thetaController;
+
 	private DrivetrainSubsystem() {
 
 		SwerveModuleDetails frontLeftDetails = new SwerveModuleDetails(FRONT_LEFT_MODULE_DRIVE_MOTOR, FRONT_LEFT_MODULE_STEER_MOTOR, FRONT_LEFT_MODULE_STEER_ENCODER, FRONT_LEFT_MODULE_STEER_OFFSET, SwerveModuleEnum.frontLeft);
@@ -64,8 +68,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		if (Robot.isSimulation())
 		{
 			navx = new NavxSim();
+			thetaController = new PIDController(THETA_CONTROLLER_SIM.kP, THETA_CONTROLLER_SIM.kI, THETA_CONTROLLER_SIM.kD);
 		}else{
 			navx = new NavxReal();
+			thetaController = new PIDController(THETA_CONTROLLER_REAL.kP, THETA_CONTROLLER_REAL.kI, THETA_CONTROLLER_REAL.kD);
 		}
 
 		frontLeftPosition = frontLeft.getModulePosition();
@@ -90,6 +96,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		mode = DrivetrainMode.teleop;
 
 		setSpeedMode(SpeedMode.normal);
+
+
 	}
 
 	@Override
@@ -101,15 +109,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		{
 			case teleop:
 				targetSpeed = targetTeleopSpeeds;
+				thetaController.reset();
 				break;
 			case teleop_autoAline:
 				targetSpeed = targetTeleopAutoAlineSpeeds;
+				thetaController.reset();
 				break;
 			case auto:
 				targetSpeed = targetAutoSpeeds;
+				thetaController.reset();
 				break;
 			case auto_autoAline:
 				targetSpeed = targetAutoAlineSpeeds;
+				thetaController.reset();
+				break;
+			case telop_auto_turn:
+
+				targetSpeed = new ChassisSpeeds(targetTeleopSpeeds.vxMetersPerSecond, targetTeleopSpeeds.vyMetersPerSecond,0);
 				break;
 			default:
 				throw new RuntimeException("Triggered a default state, IDK how you did this get help from Matthew, " +

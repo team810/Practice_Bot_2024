@@ -73,6 +73,7 @@ public class Pneumatics extends SubsystemBase {
             default:
                 throw new RuntimeException("Pneumatics Hub type not defined properly, it needs to be ether a ctre or rev Pneumatics module");
         }
+        
     }
 
     public DoubleSolenoid createSolenoid(int fwd, int back)

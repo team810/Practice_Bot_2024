@@ -10,7 +10,6 @@ import frc.robot.subsystem.drivetrain.DrivetrainConstants;
 import frc.robot.subsystem.drivetrain.DrivetrainSubsystem;
 import frc.robot.subsystem.drivetrain.SpeedMode;
 
-
 /**
  * The drive train command is meant to handle drivetrain inputs in telop
  */
@@ -28,12 +27,14 @@ public class DriveCommand extends CommandBase {
 	private final SlewRateLimiter ySlewRate = new SlewRateLimiter(1,1,0);
 	private final SlewRateLimiter thetaSlewRate = new SlewRateLimiter(1,1,0);
 
+
 	public DriveCommand() {
 		addRequirements(DrivetrainSubsystem.getInstance());
 	}
 
 	@Override
 	public void execute() {
+
 
 		// Joystick input
 
@@ -44,10 +45,6 @@ public class DriveCommand extends CommandBase {
 		x = -IO.getJoystickValue(Controls.drive_x).get();
 		y = -IO.getJoystickValue(Controls.drive_y).get();
 		theta = -IO.getJoystickValue(Controls.drive_theta).get();
-
-//		x = xSlewRate.calculate(x);
-//		y = ySlewRate.calculate(x);
-//		theta = thetaSlewRate.calculate(x);
 
 		x = xDeadband.apply(x);
 		y = yDeadband.apply(y);

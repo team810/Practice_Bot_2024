@@ -1,5 +1,6 @@
 package frc.robot.subsystem.drivetrain;
 
+import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 public interface SwerveModuleIO {
@@ -20,4 +21,9 @@ public interface SwerveModuleIO {
 	 * This resets the wheel distence traveled
 	 */
 	 void resetPosition();
+
+	/**
+	 * Sets the ideal mode of the drive motor the default is break
+	 */
+	default void setIdleMode(CANSparkMax.IdleMode mode) {};
 }

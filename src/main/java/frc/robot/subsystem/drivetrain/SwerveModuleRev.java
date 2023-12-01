@@ -80,6 +80,11 @@ public class SwerveModuleRev implements SwerveModuleIO {
     }
 
     @Override
+    public void setIdleMode(CANSparkMax.IdleMode mode) {
+		drive.setIdleMode(mode);
+    }
+
+    @Override
 	public void setDriveVoltage(double voltage) {
 		driveVoltage = MathUtil.applyDeadband(MathUtil.clamp(voltage, -12, 12), 1);
 		drive.setVoltage(driveVoltage);

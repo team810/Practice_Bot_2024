@@ -1,6 +1,7 @@
 package frc.robot.subsystem.drivetrain;
 
 
+import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -52,8 +53,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	private SpeedMode speedMode;
 
 	private final PIDController thetaController;
+	private int targetAngle;
 
 	private DrivetrainSubsystem() {
+
+		Pigeon2 gyro = new Pigeon2(0);
 
 		SwerveModuleDetails frontLeftDetails = new SwerveModuleDetails(FRONT_LEFT_MODULE_DRIVE_MOTOR, FRONT_LEFT_MODULE_STEER_MOTOR, FRONT_LEFT_MODULE_STEER_ENCODER, FRONT_LEFT_MODULE_STEER_OFFSET, SwerveModuleEnum.frontLeft);
 		SwerveModuleDetails frontRightDetails = new SwerveModuleDetails(FRONT_RIGHT_MODULE_DRIVE_MOTOR, FRONT_RIGHT_MODULE_STEER_MOTOR, FRONT_RIGHT_MODULE_STEER_ENCODER, FRONT_RIGHT_MODULE_STEER_OFFSET, SwerveModuleEnum.frontRight);
@@ -96,12 +100,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		mode = DrivetrainMode.teleop;
 
 		setSpeedMode(SpeedMode.normal);
-
-
 	}
 
 	@Override
 	public void periodic() {
+
 
 		ChassisSpeeds targetSpeed;
 
@@ -124,7 +127,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 				thetaController.reset();
 				break;
 			case telop_auto_turn:
-
 				targetSpeed = new ChassisSpeeds(targetTeleopSpeeds.vxMetersPerSecond, targetTeleopSpeeds.vyMetersPerSecond,0);
 				break;
 			default:
@@ -187,6 +189,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		Logger.getInstance().recordOutput("Drivetrain/gyro" ,getRotation().getRadians());
 		Logger.getInstance().recordOutput("RobotPose", getPose());
 
+	}
+
+	public void setTargetAngle(int angle)
+	{
+		targetAngle = angle;
 	}
 
 	public void resetOdometry(Pose2d newPose)

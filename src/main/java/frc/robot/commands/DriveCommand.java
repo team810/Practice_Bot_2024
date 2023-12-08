@@ -7,6 +7,7 @@ import frc.lib.Deadband;
 import frc.robot.IO.Controls;
 import frc.robot.IO.IO;
 import frc.robot.subsystem.drivetrain.DrivetrainConstants;
+import frc.robot.subsystem.drivetrain.DrivetrainMode;
 import frc.robot.subsystem.drivetrain.DrivetrainSubsystem;
 import frc.robot.subsystem.drivetrain.SpeedMode;
 
@@ -98,5 +99,10 @@ public class DriveCommand extends CommandBase {
 			DrivetrainSubsystem.getInstance().setSpeedMode(SpeedMode.normal);
 		}
 
+		if (IO.getJoystickValue(Controls.autoTurnPOV).get().intValue() != -1)
+		{
+			DrivetrainSubsystem.getInstance().setMode(DrivetrainMode.telop_auto_turn);
+			DrivetrainSubsystem.getInstance().setTargetAngle(IO.getJoystickValue(Controls.autoTurnPOV).get().intValue());
+		}
 	}
 }

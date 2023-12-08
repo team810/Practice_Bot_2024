@@ -68,6 +68,7 @@ public class VisionSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
         limelight.update();
+
         for (int i = 0; i < limelight.getResults().getTargets().size(); i++) {
             Pose3d targetPose = new Pose3d(DrivetrainSubsystem.getInstance().getPose()).transformBy(limelight.getResults().targets.get(i).getBestCameraToTarget());
             Logger.getInstance().recordOutput("Vision/AprilTag/" + i , targetPose);
@@ -89,17 +90,13 @@ public class VisionSubsystem extends SubsystemBase {
                 }
                 Logger.getInstance().recordOutput("TargetSize", limelight.getResults().targets.get(0).getArea());
             } else {
-//                Logger.getInstance().recordOutput("VisionPose", new Pose3d(DrivetrainSubsystem.getInstance().getPose()));
                 Logger.getInstance().recordOutput("VisionPose", new Pose3d(0,0,0,new Rotation3d()));
             }
         }else {
-//            Logger.getInstance().recordOutput("VisionPose", DrivetrainSubsystem.getInstance().getPose());
             Logger.getInstance().recordOutput("VisionPose", new Pose3d(0,0,0,new Rotation3d()));
         }
 
     }
-
-
     public AprilTagFieldLayout getFieldLayout() {
         return fieldLayout;
     }

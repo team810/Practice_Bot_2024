@@ -7,7 +7,7 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.SimVisionSystem;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-public class LimelightSim implements CameraIO{
+class LimelightSim implements CameraIO{
 
     private final SimVisionSystem simVisionSystem;
 

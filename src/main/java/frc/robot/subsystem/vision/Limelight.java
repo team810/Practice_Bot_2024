@@ -5,7 +5,7 @@ import org.littletonrobotics.junction.Logger;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-public class Limelight implements CameraIO
+class Limelight implements CameraIO
 {
     private final PhotonCamera limelight;
     private final String cameraName;
@@ -56,6 +56,7 @@ public class Limelight implements CameraIO
     @Override
     public PhotonCamera getCamera() {
         return limelight;
+
     }
 
     @Override

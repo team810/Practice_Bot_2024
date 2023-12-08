@@ -3,6 +3,7 @@ package frc.robot.subsystem.drivetrain;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotState;
@@ -10,7 +11,7 @@ import frc.lib.GlobalConstants;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
-public class SwerveModule {
+class SwerveModule {
     private final SwerveModuleIO module;
 
     private final PIDController driveController;
@@ -70,13 +71,18 @@ public class SwerveModule {
         }
 
         this.details = details;
+
+        module.setState(new SwerveModuleState(0,new Rotation2d()));
+        setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
 
     public void setIdleMode(CANSparkMax.IdleMode mode)
     {
-
+        module.setIdleMode(mode);
     }
+
     void periodic(){
+        module.setState(state);
         module.update();
 
         double speedOfMotorRPM = state.speedMetersPerSecond;
@@ -108,6 +114,7 @@ public class SwerveModule {
         }
 
         position = new SwerveModulePosition(module.getWheelPosition(),module.getWheelAngle());
+
     }
 
     void setState(SwerveModuleState state)

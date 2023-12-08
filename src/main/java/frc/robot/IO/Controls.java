@@ -6,5 +6,6 @@ public enum Controls {
     drive_theta,
     reset_gyro,
     slowMode,
-    normalMode
+    normalMode,
+    autoTurnPOV,
 }

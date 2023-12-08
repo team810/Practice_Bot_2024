@@ -2,8 +2,9 @@ package frc.robot.subsystem.drivetrain;
 
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 
-public interface SwerveModuleIO {
+interface SwerveModuleIO {
 	/** @param voltage -12 to 12*/
 	void setDriveVoltage(double voltage);
 	/** @param voltage -12 to 12*/
@@ -22,6 +23,7 @@ public interface SwerveModuleIO {
 	 */
 	 void resetPosition();
 
+	 default void setState(SwerveModuleState state) {};
 	/**
 	 * Sets the ideal mode of the drive motor the default is break
 	 */

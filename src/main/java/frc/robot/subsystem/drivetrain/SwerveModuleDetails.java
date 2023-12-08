@@ -1,6 +1,6 @@
 package frc.robot.subsystem.drivetrain;
 
-public class SwerveModuleDetails {
+class SwerveModuleDetails {
 	public int driveID;
 	public int steerID;
 	public int encoderID;

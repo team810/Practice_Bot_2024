@@ -8,7 +8,7 @@ import frc.lib.MoreMath;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
-public class SwerveModuleSim implements SwerveModuleIO {
+class SwerveModuleSim implements SwerveModuleIO {
 	private final FlywheelSim drive;
 	private final FlywheelSim steer;
 

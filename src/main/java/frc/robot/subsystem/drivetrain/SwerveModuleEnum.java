@@ -1,6 +1,6 @@
 package frc.robot.subsystem.drivetrain;
 
-public enum SwerveModuleEnum {
+enum SwerveModuleEnum {
 	frontLeft,
 	frontRight,
 	backLeft,

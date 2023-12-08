@@ -3,7 +3,7 @@ package frc.robot.subsystem.vision;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-public interface CameraIO {
+interface CameraIO {
 
     public void setCameraMode(CameraMode mode);
     public CameraMode getCurrentCameraMode();

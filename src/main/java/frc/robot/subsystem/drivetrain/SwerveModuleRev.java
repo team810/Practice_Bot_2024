@@ -10,7 +10,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import org.littletonrobotics.junction.Logger;
 
-public class SwerveModuleRev implements SwerveModuleIO {
+class SwerveModuleRev implements SwerveModuleIO {
 	private final CANSparkMax drive;
 	private final CANSparkMax steer;
 
@@ -36,12 +36,14 @@ public class SwerveModuleRev implements SwerveModuleIO {
 		drive.enableVoltageCompensation(12.0);
 		steer.enableVoltageCompensation(12.0);
 
+		drive.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 10);
 		drive.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 10);
+		drive.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus4, 400);
 
 		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 100);
 		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 200);
 		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus3, 200);
-		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus4, 200);
+		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus4, 400); // This is for alternate encoders witch we do not use
 		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus5, 200);
 		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus6, 200);
 
@@ -55,6 +57,7 @@ public class SwerveModuleRev implements SwerveModuleIO {
 		// Encoder Configuration
 		configuration.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
 		configuration.magnetOffsetDegrees = details.encoderOffset;
+
 
 		canCoder.configAllSettings(configuration);
 

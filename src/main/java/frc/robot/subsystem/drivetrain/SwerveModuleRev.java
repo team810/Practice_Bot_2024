@@ -1,8 +1,8 @@
 package frc.robot.subsystem.drivetrain;
 
-import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
@@ -14,8 +14,10 @@ class SwerveModuleRev implements SwerveModuleIO {
 	private final CANSparkMax drive;
 	private final CANSparkMax steer;
 
+
+
 	private final RelativeEncoder drive_encoder;
-	private final CANCoder canCoder;
+	private final CANcoder canCoder;
 	private final SwerveModuleDetails details;
 
 	private double driveVoltage;
@@ -26,12 +28,13 @@ class SwerveModuleRev implements SwerveModuleIO {
 
 		drive = new CANSparkMax(details.driveID, CANSparkMaxLowLevel.MotorType.kBrushless);
 		steer = new CANSparkMax(details.steerID, CANSparkMaxLowLevel.MotorType.kBrushless);
+
 		
-		canCoder = new CANCoder(details.encoderID);
+		canCoder = new CANcoder(details.encoderID);
 		this.details = details;
 
 		drive.setSmartCurrentLimit(40);
-		steer.setSmartCurrentLimit(20);
+		steer.setSmartCurrentLimit(30);
 
 		drive.enableVoltageCompensation(12.0);
 		steer.enableVoltageCompensation(12.0);
@@ -52,14 +55,10 @@ class SwerveModuleRev implements SwerveModuleIO {
 
 		drive_encoder = drive.getEncoder();
 
-		CANCoderConfiguration configuration = new CANCoderConfiguration();
+		CANcoderConfiguration configuration = new CANcoderConfiguration();
 
 		// Encoder Configuration
-		configuration.absoluteSensorRange = AbsoluteSensorRange.Signed_PlusMinus180;
-		configuration.magnetOffsetDegrees = details.encoderOffset;
-
-
-		canCoder.configAllSettings(configuration);
+		configuration.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
 
 		driveVoltage = 0;
 		steerVoltage = 0;
@@ -101,7 +100,7 @@ class SwerveModuleRev implements SwerveModuleIO {
 
 	@Override
 	public Rotation2d getWheelAngle() {
-		return new Rotation2d(canCoder.getAbsolutePosition());
+		return new Rotation2d(canCoder.getAbsolutePosition().getValue());
 	}
 
 	@Override

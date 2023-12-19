@@ -8,23 +8,23 @@ public final class DrivetrainConstants {
 
 	public static final int FRONT_LEFT_MODULE_DRIVE_MOTOR = 6;
 	public static final int FRONT_LEFT_MODULE_STEER_MOTOR = 5;
-	public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 15;
-	public static final double FRONT_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(269.30);
+	public static final int FRONT_LEFT_MODULE_STEER_ENCODER = 11;
+	public static final double FRONT_LEFT_MODULE_STEER_OFFSET = 0;
 
 	public static final int FRONT_RIGHT_MODULE_DRIVE_MOTOR = 8;
 	public static final int FRONT_RIGHT_MODULE_STEER_MOTOR = 7;
-	public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 13;
-	public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(238.62);
+	public static final int FRONT_RIGHT_MODULE_STEER_ENCODER = 12;
+	public static final double FRONT_RIGHT_MODULE_STEER_OFFSET = 0;
 
 	public static final int BACK_LEFT_MODULE_DRIVE_MOTOR = 2;
 	public static final int BACK_LEFT_MODULE_STEER_MOTOR = 1;
-	public static final int BACK_LEFT_MODULE_STEER_ENCODER = 16;
-	public static final double BACK_LEFT_MODULE_STEER_OFFSET = -Math.toRadians(168.22);
+	public static final int BACK_LEFT_MODULE_STEER_ENCODER = 10;
+	public static final double BACK_LEFT_MODULE_STEER_OFFSET = 0;
 
 	public static final int BACK_RIGHT_MODULE_DRIVE_MOTOR = 4;
 	public static final int BACK_RIGHT_MODULE_STEER_MOTOR = 3;
-	public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 14;
-	public static final double BACK_RIGHT_MODULE_STEER_OFFSET = -Math.toRadians(79.63);
+	public static final int BACK_RIGHT_MODULE_STEER_ENCODER = 9;
+	public static final double BACK_RIGHT_MODULE_STEER_OFFSET = 0;
 
 	/**
 	 * Max Speed of the robot
@@ -44,11 +44,9 @@ public final class DrivetrainConstants {
 
 	public static final PIDConstants DRIVE_CONTROLLER_SIM = new PIDConstants(0.035,0,0);
 	public static final PIDConstants STEER_CONTROLLER_SIM = new PIDConstants(4,1,0.1);
-	public static final PIDConstants THETA_CONTROLLER_REAL = new PIDConstants(0,0,0);
 
 	public static final PIDConstants DRIVE_CONTROLLER_REAL = new PIDConstants(0,0,0);
 	public static final PIDConstants STEER_CONTROLLER_REAL = new PIDConstants(0,0,0);
-	public static final PIDConstants THETA_CONTROLLER_SIM = new PIDConstants(0,0,0);
 
 	/**
 	 * The measurement of the front Left wheel to the front right wheel or the back left wheel to the back right wheel

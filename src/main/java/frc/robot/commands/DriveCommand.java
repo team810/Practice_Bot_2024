@@ -102,7 +102,6 @@ public class DriveCommand extends CommandBase {
 		if (IO.getJoystickValue(Controls.autoTurnPOV).get().intValue() != -1)
 		{
 			DrivetrainSubsystem.getInstance().setMode(DrivetrainMode.telop_auto_turn);
-			DrivetrainSubsystem.getInstance().setTargetAngle(IO.getJoystickValue(Controls.autoTurnPOV).get().intValue());
 		}
 	}
 }

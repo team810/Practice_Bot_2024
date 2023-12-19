@@ -1,8 +1,6 @@
 package frc.robot.subsystem.drivetrain;
 
 
-import com.ctre.phoenix.sensors.Pigeon2;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.*;
@@ -52,12 +50,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 	private SpeedMode speedMode;
 
-	private final PIDController thetaController;
-	private int targetAngle;
-
 	private DrivetrainSubsystem() {
 
-		Pigeon2 gyro = new Pigeon2(0);
 
 		SwerveModuleDetails frontLeftDetails = new SwerveModuleDetails(FRONT_LEFT_MODULE_DRIVE_MOTOR, FRONT_LEFT_MODULE_STEER_MOTOR, FRONT_LEFT_MODULE_STEER_ENCODER, FRONT_LEFT_MODULE_STEER_OFFSET, SwerveModuleEnum.frontLeft);
 		SwerveModuleDetails frontRightDetails = new SwerveModuleDetails(FRONT_RIGHT_MODULE_DRIVE_MOTOR, FRONT_RIGHT_MODULE_STEER_MOTOR, FRONT_RIGHT_MODULE_STEER_ENCODER, FRONT_RIGHT_MODULE_STEER_OFFSET, SwerveModuleEnum.frontRight);
@@ -72,10 +66,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		if (Robot.isSimulation())
 		{
 			navx = new NavxSim();
-			thetaController = new PIDController(THETA_CONTROLLER_SIM.kP, THETA_CONTROLLER_SIM.kI, THETA_CONTROLLER_SIM.kD);
 		}else{
 			navx = new NavxReal();
-			thetaController = new PIDController(THETA_CONTROLLER_REAL.kP, THETA_CONTROLLER_REAL.kI, THETA_CONTROLLER_REAL.kD);
 		}
 
 		frontLeftPosition = frontLeft.getModulePosition();
@@ -112,19 +104,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		{
 			case teleop:
 				targetSpeed = targetTeleopSpeeds;
-				thetaController.reset();
 				break;
 			case teleop_autoAline:
 				targetSpeed = targetTeleopAutoAlineSpeeds;
-				thetaController.reset();
 				break;
 			case auto:
 				targetSpeed = targetAutoSpeeds;
-				thetaController.reset();
 				break;
 			case auto_autoAline:
 				targetSpeed = targetAutoAlineSpeeds;
-				thetaController.reset();
 				break;
 			case telop_auto_turn:
 				targetSpeed = new ChassisSpeeds(targetTeleopSpeeds.vxMetersPerSecond, targetTeleopSpeeds.vyMetersPerSecond,0);
@@ -191,10 +179,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 	}
 
-	public void setTargetAngle(int angle)
-	{
-		targetAngle = angle;
-	}
 
 	public void resetOdometry(Pose2d newPose)
 	{

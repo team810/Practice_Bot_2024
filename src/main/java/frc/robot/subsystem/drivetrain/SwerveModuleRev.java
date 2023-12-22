@@ -3,6 +3,7 @@ package frc.robot.subsystem.drivetrain;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
@@ -13,8 +14,6 @@ import org.littletonrobotics.junction.Logger;
 class SwerveModuleRev implements SwerveModuleIO {
 	private final CANSparkMax drive;
 	private final CANSparkMax steer;
-
-
 
 	private final RelativeEncoder drive_encoder;
 	private final CANcoder canCoder;
@@ -29,6 +28,11 @@ class SwerveModuleRev implements SwerveModuleIO {
 		drive = new CANSparkMax(details.driveID, CANSparkMaxLowLevel.MotorType.kBrushless);
 		steer = new CANSparkMax(details.steerID, CANSparkMaxLowLevel.MotorType.kBrushless);
 
+		drive.restoreFactoryDefaults();
+		steer.restoreFactoryDefaults();
+
+		drive.clearFaults();
+		steer.clearFaults();
 		
 		canCoder = new CANcoder(details.encoderID);
 		this.details = details;
@@ -39,16 +43,6 @@ class SwerveModuleRev implements SwerveModuleIO {
 		drive.enableVoltageCompensation(12.0);
 		steer.enableVoltageCompensation(12.0);
 
-		drive.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 10);
-		drive.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 10);
-		drive.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus4, 400);
-
-		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 100);
-		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 200);
-		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus3, 200);
-		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus4, 400); // This is for alternate encoders witch we do not use
-		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus5, 200);
-		steer.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus6, 200);
 
 		drive.setIdleMode(CANSparkMax.IdleMode.kBrake);
 		steer.setIdleMode(CANSparkMax.IdleMode.kBrake);
@@ -56,9 +50,8 @@ class SwerveModuleRev implements SwerveModuleIO {
 		drive_encoder = drive.getEncoder();
 
 		CANcoderConfiguration configuration = new CANcoderConfiguration();
-
-		// Encoder Configuration
-		configuration.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+		configuration.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+		configuration.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Unsigned_0To1;
 
 		driveVoltage = 0;
 		steerVoltage = 0;
@@ -71,7 +64,7 @@ class SwerveModuleRev implements SwerveModuleIO {
 		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/DriveTemperature", drive.getMotorTemperature());
 
 		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/SteerVoltage", steerVoltage);
-		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getDegrees());
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getRadians());
 		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerAmpDraw", drive.getOutputCurrent());
 		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerTemperature", steer.getMotorTemperature());
 	}
@@ -88,19 +81,24 @@ class SwerveModuleRev implements SwerveModuleIO {
 
     @Override
 	public void setDriveVoltage(double voltage) {
-		driveVoltage = MathUtil.applyDeadband(MathUtil.clamp(voltage, -12, 12), 1);
-		drive.setVoltage(driveVoltage);
+		driveVoltage = MathUtil.clamp(voltage, -1, 1);
+
+		drive.set(driveVoltage);
 	}
 
 	@Override
 	public void setSteerVoltage(double voltage) {
-		steerVoltage = MathUtil.applyDeadband(MathUtil.clamp(voltage, -12, 12), 1);
-		steer.setVoltage(steerVoltage);
+		steerVoltage = MathUtil.clamp(voltage, -1, 1);
+		steerVoltage = -1 * steerVoltage;
+		steer.set(steerVoltage);
 	}
 
 	@Override
 	public Rotation2d getWheelAngle() {
-		return new Rotation2d(canCoder.getAbsolutePosition().getValue());
+
+		return new Rotation2d(
+				MathUtil.angleModulus(canCoder.getPosition().getValue() * 2 * Math.PI)
+		);
 	}
 
 	@Override

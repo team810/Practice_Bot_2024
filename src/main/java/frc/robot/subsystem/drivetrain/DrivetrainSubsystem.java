@@ -132,11 +132,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 		);
 
 
-		// This mess with the pid controllers
-//		states[0] = SwerveModuleState.optimize(states[0], frontLeft.getState().angle);
-//		states[1] = SwerveModuleState.optimize(states[1], frontRight.getState().angle);
-//		states[2] = SwerveModuleState.optimize(states[2], backLeft.getState().angle);
-//		states[3] = SwerveModuleState.optimize(states[3], backRight.getState().angle);
+		// This mess with the pid controllers, it makes the mid controllers go back and forth
+		states[0] = SwerveModuleState.optimize(states[0], frontLeft.getState().angle);
+		states[1] = SwerveModuleState.optimize(states[1], frontRight.getState().angle);
+		states[2] = SwerveModuleState.optimize(states[2], backLeft.getState().angle);
+		states[3] = SwerveModuleState.optimize(states[3], backRight.getState().angle);
 
 		frontLeft.setState(states[0]);
 		frontRight.setState(states[1]);

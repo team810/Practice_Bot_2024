@@ -38,7 +38,10 @@ public class Robot extends LoggedRobot
     @Override
     public void robotPeriodic()
     {
-        REVPhysicsSim.getInstance().run();
+        if  (Robot.isSimulation())
+        {
+            REVPhysicsSim.getInstance().run();
+        }
         CommandScheduler.getInstance().run();
 
         Logger.getInstance().recordOutput("BatteryVoltage/", RobotController.getBatteryVoltage());

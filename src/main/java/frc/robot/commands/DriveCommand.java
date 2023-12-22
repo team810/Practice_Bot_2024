@@ -43,9 +43,9 @@ public class DriveCommand extends CommandBase {
 		double y = 0;
 		double theta = 0;
 
-		x = -IO.getJoystickValue(Controls.drive_x).get();
-		y = -IO.getJoystickValue(Controls.drive_y).get();
-		theta = -IO.getJoystickValue(Controls.drive_theta).get();
+		x = IO.getJoystickValue(Controls.drive_x).get();
+		y = IO.getJoystickValue(Controls.drive_y).get();
+		theta = IO.getJoystickValue(Controls.drive_theta).get();
 
 		x = xDeadband.apply(x);
 		y = yDeadband.apply(y);

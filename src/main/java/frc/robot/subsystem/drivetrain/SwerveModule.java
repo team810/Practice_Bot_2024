@@ -25,11 +25,11 @@ class SwerveModule {
 
     public SwerveModule(SwerveModuleDetails details)
     {
-        driveController = new PIDController(0,0,0);
-        driveController.setTolerance(10);
+        driveController = new PIDController(0,0,0, Robot.defaultPeriodSecs);
+        steerController = new PIDController(0,0,0, Robot.defaultPeriodSecs);
 
-        steerController = new PIDController(0,0,0);
-        steerController.enableContinuousInput(-Math.PI, Math.PI);
+        driveController.setTolerance(10);
+        steerController.setTolerance(0);
 
         if (Robot.isReal())
         {
@@ -40,6 +40,10 @@ class SwerveModule {
             steerController.setP(DrivetrainConstants.STEER_CONTROLLER_REAL.kP);
             steerController.setI(DrivetrainConstants.STEER_CONTROLLER_REAL.kI);
             steerController.setD(DrivetrainConstants.STEER_CONTROLLER_REAL.kD);
+
+            steerController.enableContinuousInput(-Math.PI, Math.PI);
+            steerController.setTolerance(.1);
+
         } else if (Robot.isSimulation()) {
 
             driveController.setP(DrivetrainConstants.DRIVE_CONTROLLER_SIM.kP);
@@ -49,6 +53,9 @@ class SwerveModule {
             steerController.setP(DrivetrainConstants.STEER_CONTROLLER_SIM.kP);
             steerController.setI(DrivetrainConstants.STEER_CONTROLLER_SIM.kI);
             steerController.setD(DrivetrainConstants.DRIVE_CONTROLLER_SIM.kD);
+
+            steerController.enableContinuousInput(-Math.PI, Math.PI);
+            steerController.setTolerance(.01);
         }else{
             throw new RuntimeException(
                     "The PID controls for both the drive controller " +
@@ -56,8 +63,6 @@ class SwerveModule {
                     "how is the robot not real or simulated"
             );
         }
-
-        steerController.setTolerance(.01);
 
         position = new SwerveModulePosition();
 
@@ -72,8 +77,8 @@ class SwerveModule {
 
         this.details = details;
 
+
         module.setState(new SwerveModuleState(0,new Rotation2d()));
-        setIdleMode(CANSparkMax.IdleMode.kBrake);
     }
 
     public void setIdleMode(CANSparkMax.IdleMode mode)
@@ -83,7 +88,6 @@ class SwerveModule {
 
     void periodic(){
         module.setState(state);
-        module.update();
 
         double speedOfMotorRPM = state.speedMetersPerSecond;
 
@@ -95,12 +99,19 @@ class SwerveModule {
         }
         speedOfMotorRPM = speedOfMotorRPM * GlobalConstants.NEO_MAX_RPM;
 
+        if (details.module == SwerveModuleEnum.frontRight)
+        {
+            speedOfMotorRPM = speedOfMotorRPM * -1;
+        }
+
         module.setDriveVoltage(
                 driveController.calculate(module.getWheelVelocity(), speedOfMotorRPM)
         );
         module.setSteerVoltage(
-                steerController.calculate(MathUtil.angleModulus(module.getWheelAngle().getRadians()), MathUtil.angleModulus(state.angle.getRadians()))
+                steerController.calculate(module.getWheelAngle().getRadians(), MathUtil.angleModulus(state.angle.getRadians()))
         );
+
+        module.update();
         Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/TargetVelocity", speedOfMotorRPM);
         Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/TargetAngle", state.angle.getRadians());
         Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/AtAngleSetpoint", steerController.atSetpoint());

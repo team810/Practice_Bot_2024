@@ -226,7 +226,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	{
 		return odometry.getPoseMeters();
 	}
-
 	public void setTargetAutoSpeeds(double x, double y, double z)
 	{
 		targetAutoSpeeds = new ChassisSpeeds(x,y,z);

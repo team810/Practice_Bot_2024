@@ -34,6 +34,7 @@ class SwerveModule {
         if (Robot.isReal())
         {
             driveController.setP(DrivetrainConstants.DRIVE_CONTROLLER_REAL.kP);
+            driveController.setP(DrivetrainConstants.DRIVE_CONTROLLER_REAL.kP);
             driveController.setI(DrivetrainConstants.DRIVE_CONTROLLER_REAL.kI);
             driveController.setD(DrivetrainConstants.DRIVE_CONTROLLER_REAL.kD);
 
@@ -99,7 +100,7 @@ class SwerveModule {
         }
         speedOfMotorRPM = speedOfMotorRPM * GlobalConstants.NEO_MAX_RPM;
 
-        if (details.module == SwerveModuleEnum.frontRight)
+        if (details.module == SwerveModuleEnum.frontRight && Robot.isReal())
         {
             speedOfMotorRPM = speedOfMotorRPM * -1;
         }

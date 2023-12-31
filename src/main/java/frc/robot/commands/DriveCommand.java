@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.Deadband;
 import frc.robot.IO.Controls;
@@ -10,6 +11,7 @@ import frc.robot.subsystem.drivetrain.DrivetrainConstants;
 import frc.robot.subsystem.drivetrain.DrivetrainMode;
 import frc.robot.subsystem.drivetrain.DrivetrainSubsystem;
 import frc.robot.subsystem.drivetrain.SpeedMode;
+import org.littletonrobotics.junction.Logger;
 
 /**
  * The drive train command is meant to handle drivetrain inputs in telop
@@ -24,9 +26,9 @@ public class DriveCommand extends CommandBase {
 	 * The Slew Rate Limiter is applied when the input is between -1 and 1.
 	 * If the slew rate is 1 that means that it will take 1 second to get to 1 if it was 2 this would mean it would take 1 second to get to 2
 	 */
-	private final SlewRateLimiter xSlewRate = new SlewRateLimiter(1,1,0);
-	private final SlewRateLimiter ySlewRate = new SlewRateLimiter(1,1,0);
-	private final SlewRateLimiter thetaSlewRate = new SlewRateLimiter(1,1,0);
+	private final SlewRateLimiter xSlewRate = new SlewRateLimiter(2,-2,0);
+	private final SlewRateLimiter ySlewRate = new SlewRateLimiter(2,-2,0);
+	private final SlewRateLimiter thetaSlewRate = new SlewRateLimiter(1,-1,0);
 
 
 	public DriveCommand() {
@@ -35,7 +37,6 @@ public class DriveCommand extends CommandBase {
 
 	@Override
 	public void execute() {
-
 
 		// Joystick input
 
@@ -47,13 +48,26 @@ public class DriveCommand extends CommandBase {
 		y = IO.getJoystickValue(Controls.drive_y).get();
 		theta = IO.getJoystickValue(Controls.drive_theta).get();
 
+
 		x = xDeadband.apply(x);
 		y = yDeadband.apply(y);
 		theta = thetaDeadband.apply(theta);
+		Logger.getInstance().recordOutput("RawY", y);
+
+		if (RobotState.isEnabled())
+		{
+
+			x = xSlewRate.calculate(x);
+			y = ySlewRate.calculate(y);
+			theta = thetaSlewRate.calculate(theta);
+		}
+
+
 
 		x = Math.pow(x,3);
 		y = Math.pow(y,3);
 		theta = Math.pow(theta,3);
+		Logger.getInstance().recordOutput("LimitY", y);
 
 		if (DrivetrainSubsystem.getInstance().getSpeedMode() == SpeedMode.normal)
 		{

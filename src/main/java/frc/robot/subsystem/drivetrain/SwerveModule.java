@@ -7,7 +7,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.RobotState;
-import frc.lib.GlobalConstants;
 import frc.robot.Robot;
 import org.littletonrobotics.junction.Logger;
 
@@ -90,15 +89,7 @@ class SwerveModule {
     void periodic(){
         module.setState(state);
 
-        double speedOfMotorRPM = state.speedMetersPerSecond;
-
-        if (mode == SpeedMode.slow)
-        {
-            speedOfMotorRPM = speedOfMotorRPM / DrivetrainConstants.SLOW_SPEED;
-        } else if (mode == SpeedMode.normal) {
-            speedOfMotorRPM = speedOfMotorRPM / DrivetrainConstants.NORMAL_SPEED;
-        }
-        speedOfMotorRPM = speedOfMotorRPM * GlobalConstants.NEO_MAX_RPM;
+        double speedOfMotorRPM = (state.speedMetersPerSecond / DrivetrainConstants.DISTANCE_PER_REVOLUTION) * 60 * DrivetrainConstants.GEAR_REDUCTION_DRIVE;
 
         if (details.module == SwerveModuleEnum.frontRight && Robot.isReal())
         {
@@ -152,14 +143,7 @@ class SwerveModule {
     SwerveModuleState getState()
     {
         double speedOfWheel = module.getWheelVelocity();
-        speedOfWheel = speedOfWheel / GlobalConstants.NEO_MAX_RPM;
-
-        if (mode == SpeedMode.normal)
-        {
-            speedOfWheel = speedOfWheel * DrivetrainConstants.NORMAL_SPEED;
-        } else if (mode == SpeedMode.slow) {
-            speedOfWheel = speedOfWheel * DrivetrainConstants.SLOW_SPEED;
-        }
+        speedOfWheel = (((speedOfWheel / DrivetrainConstants.GEAR_REDUCTION_DRIVE) / 60)) * DrivetrainConstants.DISTANCE_PER_REVOLUTION;
 
         return new SwerveModuleState(speedOfWheel, module.getWheelAngle());
     }

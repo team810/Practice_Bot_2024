@@ -61,13 +61,13 @@ class SwerveModuleSim implements SwerveModuleIO {
 
 		wheelVelocity = drive.getAngularVelocityRPM();
 
-		Logger.recordOutput("Drivetrain/" + details.module.name() + "/WheelVelocity", wheelVelocity);
-		Logger.recordOutput("Drivetrain/" + details.module.name() + "/DriveVoltage", driveVoltage);
-		Logger.recordOutput("Drivetrain/"+ details.module.name() + "/DriveAmpDraw", drive.getCurrentDrawAmps());
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelVelocity", wheelVelocity);
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/DriveVoltage", driveVoltage);
+		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/DriveAmpDraw", drive.getCurrentDrawAmps());
 
-		Logger.recordOutput("Drivetrain/" + details.module.name() + "/SteerVoltage", steerVoltage);
-		Logger.recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getRadians());
-		Logger.recordOutput("Drivetrain/"+ details.module.name() + "/SteerAmpDraw", steer.getCurrentDrawAmps());
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/SteerVoltage", steerVoltage);
+		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getRadians());
+		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerAmpDraw", steer.getCurrentDrawAmps());
 
 	}
 

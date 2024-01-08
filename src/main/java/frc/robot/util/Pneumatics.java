@@ -104,38 +104,38 @@ public class Pneumatics extends SubsystemBase {
             case CTREPCM:
                 if (Robot.isReal())
                 {
-                    Logger.recordOutput("Pneumatics/Pressure", compressor.getCurrent());
-                    Logger.recordOutput("Pneumatics/CompressorOn", ctrePneumaticsControlModule.getCompressor());
-                    Logger.recordOutput("Pneumatics/CompressorCurrent", compressor.getCurrent());
+                    Logger.getInstance().recordOutput("Pneumatics/Pressure", compressor.getCurrent());
+                    Logger.getInstance().recordOutput("Pneumatics/CompressorOn", ctrePneumaticsControlModule.getCompressor());
+                    Logger.getInstance().recordOutput("Pneumatics/CompressorCurrent", compressor.getCurrent());
 
                     for (int i = 0; i < activeChannels.size(); i++) {
-                        Logger.recordOutput("Pneumatics/Channel_" + activeChannels.get(i), ctrePneumaticsControlModule.checkSolenoidChannel(activeChannels.get(i)));
+                        Logger.getInstance().recordOutput("Pneumatics/Channel_" + activeChannels.get(i), ctrePneumaticsControlModule.checkSolenoidChannel(activeChannels.get(i)));
                     }
                 } else if (Robot.isSimulation()) {
-                    Logger.recordOutput("Pneumatics/CompressorOn", ctrePnumaticsControlModuleSim.getCompressorOn());
-                    Logger.recordOutput("Pneumatics/CompressorCurrent", ctrePnumaticsControlModuleSim.getCompressorCurrent());
+                    Logger.getInstance().recordOutput("Pneumatics/CompressorOn", ctrePnumaticsControlModuleSim.getCompressorOn());
+                    Logger.getInstance().recordOutput("Pneumatics/CompressorCurrent", ctrePnumaticsControlModuleSim.getCompressorCurrent());
 
                     for (int i = 0; i < activeChannels.size(); i++) {
-                        Logger.recordOutput("Pneumatics/Channel_" + activeChannels.get(i), revPneumaticsHub.checkSolenoidChannel(activeChannels.get(i)));
+                        Logger.getInstance().recordOutput("Pneumatics/Channel_" + activeChannels.get(i), revPneumaticsHub.checkSolenoidChannel(activeChannels.get(i)));
                     }
                 }
                 break;
             case REVPH:
                 if (Robot.isReal())
                 {
-                    Logger.recordOutput("Pneumatics/Pressure", compressor.getPressure());
-                    Logger.recordOutput("Pneumatics/CompressorOn", revPneumaticsHub.getCompressor());
-                    Logger.recordOutput("Pneumatics/CompressorCurrent", compressor.getCurrent());
+                    Logger.getInstance().recordOutput("Pneumatics/Pressure", compressor.getPressure());
+                    Logger.getInstance().recordOutput("Pneumatics/CompressorOn", revPneumaticsHub.getCompressor());
+                    Logger.getInstance().recordOutput("Pneumatics/CompressorCurrent", compressor.getCurrent());
 
                     for (int i = 0; i < activeChannels.size(); i++) {
-                        Logger.recordOutput("Pneumatics/Channel_" + activeChannels.get(i), revPneumaticsHub.checkSolenoidChannel(activeChannels.get(i)));
+                        Logger.getInstance().recordOutput("Pneumatics/Channel_" + activeChannels.get(i), revPneumaticsHub.checkSolenoidChannel(activeChannels.get(i)));
                     }
                 } else if (Robot.isSimulation()) {
-                    Logger.recordOutput("Pneumatics/CompressorOn", revPneumaticsHubSim.getCompressorOn());
-                    Logger.recordOutput("Pneumatics/CompressorCurrent", revPneumaticsHubSim.getCompressorCurrent());
+                    Logger.getInstance().recordOutput("Pneumatics/CompressorOn", revPneumaticsHubSim.getCompressorOn());
+                    Logger.getInstance().recordOutput("Pneumatics/CompressorCurrent", revPneumaticsHubSim.getCompressorCurrent());
 
                     for (int i = 0; i < activeChannels.size(); i++) {
-                        Logger.recordOutput("Pneumatics/Channel_" + activeChannels.get(i), revPneumaticsHubSim.getSolenoidOutput(activeChannels.get(i)));
+                        Logger.getInstance().recordOutput("Pneumatics/Channel_" + activeChannels.get(i), revPneumaticsHubSim.getSolenoidOutput(activeChannels.get(i)));
                     }
                 }
                 break;

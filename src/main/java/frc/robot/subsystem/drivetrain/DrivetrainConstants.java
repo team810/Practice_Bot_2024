@@ -38,16 +38,6 @@ public final class DrivetrainConstants {
 	public static final double SLOW_SPEED = 1.0;
 
 	/**
-	 * Units Meters
-	 */
-	public static final double WHEEL_DIAMETER  = .1016;
-
-	/**
-	 * The distance traveled for ever rotation of the wheel. PI * Wheel Diameter
-	 */
-	public static final double DISTANCE_PER_REVOLUTION = Math.PI * WHEEL_DIAMETER;
-
-	/**
 	 * This is the drive motor gear reduction for the module
 	 */
 	public static final double GEAR_REDUCTION_DRIVE = 6.75;

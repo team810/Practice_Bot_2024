@@ -23,14 +23,14 @@ public class Robot extends LoggedRobot
     @Override
     public void robotInit()
     {
-        Logger.recordMetadata("ProjectName", "Off_season"); // Set a metadata value
+        Logger.getInstance().recordMetadata("ProjectName", "Off_season"); // Set a metadata value
         if (isReal()) {
-            Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
-            Logger.addDataReceiver(new NT4Publisher());
+            Logger.getInstance().addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+            Logger.getInstance().addDataReceiver(new NT4Publisher());
         } else {
-            Logger.addDataReceiver(new NT4Publisher());
+            Logger.getInstance().addDataReceiver(new NT4Publisher());
         }
-        Logger.start();
+        Logger.getInstance().start();
 
         robotContainer = new RobotContainer();
     }
@@ -44,7 +44,7 @@ public class Robot extends LoggedRobot
         }
         CommandScheduler.getInstance().run();
 
-        Logger.recordOutput("BatteryVoltage/", RobotController.getBatteryVoltage());
+        Logger.getInstance().recordOutput("BatteryVoltage/", RobotController.getBatteryVoltage());
     }
 
     @Override

@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.lib.Deadband;
 import frc.robot.IO.Controls;
 import frc.robot.IO.IO;
@@ -16,7 +16,7 @@ import org.littletonrobotics.junction.Logger;
 /**
  * The drive train command is meant to handle drivetrain inputs in telop
  */
-public class DriveCommand extends Command {
+public class DriveCommand extends CommandBase {
 
 	private final Deadband xDeadband = new Deadband(.1);
 	private final Deadband yDeadband = new Deadband(.1);
@@ -52,26 +52,27 @@ public class DriveCommand extends Command {
 		x = xDeadband.apply(x);
 		y = yDeadband.apply(y);
 		theta = thetaDeadband.apply(theta);
-		Logger.recordOutput("RawY", y);
+		Logger.getInstance().recordOutput("RawY", y);
 
 		if (RobotState.isEnabled())
 		{
 
-//			x = xSlewRate.calculate(x);
-//			y = ySlewRate.calculate(y);
-//			theta = thetaSlewRate.calculate(theta);
+			x = xSlewRate.calculate(x);
+			y = ySlewRate.calculate(y);
+			theta = thetaSlewRate.calculate(theta);
 		}
+
 
 
 		x = Math.pow(x,3);
 		y = Math.pow(y,3);
 		theta = Math.pow(theta,3);
-		Logger.recordOutput("LimitY", y);
+		Logger.getInstance().recordOutput("LimitY", y);
 
 		if (DrivetrainSubsystem.getInstance().getSpeedMode() == SpeedMode.normal)
 		{
-			x = -x * DrivetrainConstants.NORMAL_SPEED;
-			y = -y * DrivetrainConstants.NORMAL_SPEED;
+			x = x * DrivetrainConstants.NORMAL_SPEED;
+			y = y * DrivetrainConstants.NORMAL_SPEED;
 			theta = theta * DrivetrainConstants.NORMAL_SPEED;
 
 			x = MathUtil.clamp(x, -DrivetrainConstants.NORMAL_SPEED, DrivetrainConstants.NORMAL_SPEED);

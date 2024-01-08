@@ -71,7 +71,7 @@ public class VisionSubsystem extends SubsystemBase {
 
         for (int i = 0; i < limelight.getResults().getTargets().size(); i++) {
             Pose3d targetPose = new Pose3d(DrivetrainSubsystem.getInstance().getPose()).transformBy(limelight.getResults().targets.get(i).getBestCameraToTarget());
-            Logger.recordOutput("Vision/AprilTag/" + i , targetPose);
+            Logger.getInstance().recordOutput("Vision/AprilTag/" + i , targetPose);
         }
 
 
@@ -83,17 +83,17 @@ public class VisionSubsystem extends SubsystemBase {
                 if (limelight.getResults().targets.get(0).getArea() > 800)
                 {
 
-                    Logger.recordOutput("VisionPose", updated.get().estimatedPose);
+                    Logger.getInstance().recordOutput("VisionPose", updated.get().estimatedPose);
                     DrivetrainSubsystem.getInstance().resetOdometry(updated.get().estimatedPose.toPose2d());
                 }else {
-                    Logger.recordOutput("VisionPose", new Pose3d(0,0,0,new Rotation3d()));
+                    Logger.getInstance().recordOutput("VisionPose", new Pose3d(0,0,0,new Rotation3d()));
                 }
-                Logger.recordOutput("TargetSize", limelight.getResults().targets.get(0).getArea());
+                Logger.getInstance().recordOutput("TargetSize", limelight.getResults().targets.get(0).getArea());
             } else {
-                Logger.recordOutput("VisionPose", new Pose3d(0,0,0,new Rotation3d()));
+                Logger.getInstance().recordOutput("VisionPose", new Pose3d(0,0,0,new Rotation3d()));
             }
         }else {
-            Logger.recordOutput("VisionPose", new Pose3d(0,0,0,new Rotation3d()));
+            Logger.getInstance().recordOutput("VisionPose", new Pose3d(0,0,0,new Rotation3d()));
         }
 
     }

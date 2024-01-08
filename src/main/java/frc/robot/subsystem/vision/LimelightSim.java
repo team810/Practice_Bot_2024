@@ -4,7 +4,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Transform3d;
 import frc.robot.subsystem.drivetrain.DrivetrainSubsystem;
 import org.photonvision.PhotonCamera;
-import org.photonvision.simulation.SimVisionSystem;
+import org.photonvision.SimVisionSystem;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 class LimelightSim implements CameraIO{

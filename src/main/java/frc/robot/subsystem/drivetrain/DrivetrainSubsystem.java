@@ -172,10 +172,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 		odometry.update(getRotation(), new SwerveModulePosition[]{frontLeftPosition, frontRightPosition, backLeftPosition, backRightPosition});
 
-		Logger.getInstance().recordOutput("Drivetrain/currentStates", frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
-		Logger.getInstance().recordOutput("Drivetrain/states", frontLeftState, frontRightState, backLeftState, backRightState);
-		Logger.getInstance().recordOutput("Drivetrain/gyro" ,getRotation().getRadians());
-		Logger.getInstance().recordOutput("RobotPose", getPose());
+		Logger.recordOutput("Drivetrain/currentStates", frontLeft.getState(), frontRight.getState(), backLeft.getState(), backRight.getState());
+		Logger.recordOutput("Drivetrain/states", frontLeftState, frontRightState, backLeftState, backRightState);
+		Logger.recordOutput("Drivetrain/gyro" ,getRotation().getRadians());
+		Logger.recordOutput("RobotPose", getPose());
 
 	}
 

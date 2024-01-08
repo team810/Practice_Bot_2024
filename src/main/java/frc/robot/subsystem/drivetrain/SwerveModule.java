@@ -28,6 +28,7 @@ class SwerveModule {
         driveController = new PIDController(0,0,0, Robot.defaultPeriodSecs);
         steerController = new PIDController(0,0,0, Robot.defaultPeriodSecs);
 
+
         driveController.setTolerance(10);
         steerController.setTolerance(0);
 
@@ -43,7 +44,7 @@ class SwerveModule {
             steerController.setD(DrivetrainConstants.STEER_CONTROLLER_REAL.kD);
 
             steerController.enableContinuousInput(-Math.PI, Math.PI);
-            steerController.setTolerance(.1);
+            steerController.setTolerance(.01);
 
         } else if (Robot.isSimulation()) {
 
@@ -90,43 +91,33 @@ class SwerveModule {
     void periodic(){
         module.setState(state);
 
-        double speedOfMotorRPM = state.speedMetersPerSecond;
+        double speedOfMotorRPM = (state.speedMetersPerSecond / DrivetrainConstants.DISTANCE_PER_REVOLUTION) * 60;
 
-        if (mode == SpeedMode.slow)
+
+
+        if (RobotState.isEnabled())
         {
-            speedOfMotorRPM = speedOfMotorRPM / DrivetrainConstants.SLOW_SPEED;
-        } else if (mode == SpeedMode.normal) {
-            speedOfMotorRPM = speedOfMotorRPM / DrivetrainConstants.NORMAL_SPEED;
-        }
-        speedOfMotorRPM = speedOfMotorRPM * GlobalConstants.NEO_MAX_RPM;
-
-        if (details.module == SwerveModuleEnum.frontRight && Robot.isReal())
-        {
-            speedOfMotorRPM = speedOfMotorRPM * -1;
+            module.setDriveVoltage(
+                    driveController.calculate(module.getWheelVelocity(), speedOfMotorRPM)
+            );
+            module.setSteerVoltage(
+                    steerController.calculate(module.getWheelAngle().getRadians(), MathUtil.angleModulus(state.angle.getRadians()))
+            );
+            module.update();
         }
 
-        module.setDriveVoltage(
-                driveController.calculate(module.getWheelVelocity(), speedOfMotorRPM)
-        );
-        module.setSteerVoltage(
-                steerController.calculate(module.getWheelAngle().getRadians(), MathUtil.angleModulus(state.angle.getRadians()))
-        );
 
-        module.update();
-        Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/TargetVelocity", speedOfMotorRPM);
-        Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/TargetAngle", state.angle.getRadians());
-        Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/AtAngleSetpoint", steerController.atSetpoint());
+        Logger.recordOutput("Drivetrain/" + details.module.name() + "/TargetVelocity", speedOfMotorRPM);
+        Logger.recordOutput("Drivetrain/" + details.module.name() + "/TargetAngle", state.angle.getRadians());
+        Logger.recordOutput("Drivetrain/" + details.module.name() + "/AtAngleSetpoint", steerController.atSetpoint());
 
         if (RobotState.isDisabled())
         {
             steerController.reset();
-
             driveController.reset();
-
         }
 
         position = new SwerveModulePosition(module.getWheelPosition(),module.getWheelAngle());
-
     }
 
     void setState(SwerveModuleState state)

@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Build &amp; Deploy Robot" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Build &amp; Run Simulate Java" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -10,7 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="deploy" />
+          <option value="simulateJava" />
         </list>
       </option>
       <option name="vmOptions" />
@@ -21,7 +21,7 @@
     <RunAsTest>false</RunAsTest>
     <method v="2" />
   </configuration>
-  <configuration default="false" name="Build &amp; Deploy Robot" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Build &amp; Run Simulate Java" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -32,7 +32,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="deploy" />
+          <option value="simulateJava" />
         </list>
       </option>
       <option name="vmOptions" />
@@ -43,7 +43,7 @@
     <RunAsTest>false</RunAsTest>
     <method v="2" />
   </configuration>
-  <configuration default="false" name="Build &amp; Deploy Robot" type="GradleRunConfiguration" factoryName="Gradle">
+  <configuration default="false" name="Build &amp; Run Simulate Java" type="GradleRunConfiguration" factoryName="Gradle">
     <ExternalSystemSettings>
       <option name="executionName" />
       <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -54,7 +54,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value="deploy" />
+          <option value="simulateJava" />
         </list>
       </option>
       <option name="vmOptions" />

@@ -49,8 +49,8 @@ class Limelight implements CameraIO
     }
     @Override
     public void update() {
-        Logger.getInstance().recordOutput("Camera/" + cameraName + "/IsConnected", limelight.isConnected());
-        Logger.getInstance().recordOutput("Camera/" + cameraName + "/Mode", this.mode.toString());
+        Logger.recordOutput("Camera/" + cameraName + "/IsConnected", limelight.isConnected());
+        Logger.recordOutput("Camera/" + cameraName + "/Mode", this.mode.toString());
     }
 
     @Override

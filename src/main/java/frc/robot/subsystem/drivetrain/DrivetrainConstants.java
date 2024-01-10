@@ -57,7 +57,7 @@ public final class DrivetrainConstants {
 	public static final PIDConstants STEER_CONTROLLER_SIM = new PIDConstants(4,1,0.1);
 
 	public static final PIDConstants DRIVE_CONTROLLER_REAL = new PIDConstants(0.00009,.001,0);
-	public static final PIDConstants STEER_CONTROLLER_REAL = new PIDConstants(.2,0,0);
+	public static final PIDConstants STEER_CONTROLLER_REAL = new PIDConstants(.5,0,0);
 
 	public static final PIDConstants THETA_CONTROLLER_SIM = new PIDConstants(0,0,0);
 	public static final PIDConstants THETA_CONTROLLER_REAL = new PIDConstants(0,0,0);

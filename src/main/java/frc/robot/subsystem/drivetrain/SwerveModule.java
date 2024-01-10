@@ -42,7 +42,7 @@ class SwerveModule {
             steerController.setD(DrivetrainConstants.STEER_CONTROLLER_REAL.kD);
 
             steerController.enableContinuousInput(-Math.PI, Math.PI);
-            steerController.setTolerance(.1);
+            steerController.setTolerance(.01);
 
         } else if (Robot.isSimulation()) {
 
@@ -104,9 +104,9 @@ class SwerveModule {
         );
 
         module.update();
-        Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/TargetVelocity", speedOfMotorRPM);
-        Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/TargetAngle", state.angle.getRadians());
-        Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/AtAngleSetpoint", steerController.atSetpoint());
+        Logger.recordOutput("Drivetrain/" + details.module.name() + "/TargetVelocity", speedOfMotorRPM);
+        Logger.recordOutput("Drivetrain/" + details.module.name() + "/TargetAngle", state.angle.getRadians());
+        Logger.recordOutput("Drivetrain/" + details.module.name() + "/AtAngleSetpoint", steerController.atSetpoint());
 
         if (RobotState.isDisabled())
         {

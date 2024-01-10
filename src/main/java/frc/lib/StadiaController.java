@@ -27,4 +27,23 @@ public class StadiaController extends XboxController {
 
 		return super.getRawAxis(4);
 	}
+
+	@Override
+	public boolean getLeftBumper() {return getRawButton(5);}
+
+	@Override
+	public boolean getRightBumper() {return getRawButton(6);}
+
+	@Override
+	public boolean getAButton() {return super.getAButton();}
+
+	@Override
+	public boolean getBButton() {return super.getBButton();}
+
+	@Override
+	public boolean getXButton() {return super.getXButton();}
+
+	@Override
+	public boolean getYButton() {return super.getYButton();}
+
 }

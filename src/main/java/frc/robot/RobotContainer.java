@@ -1,31 +1,26 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.IO.IO;
+import frc.robot.commands.DriveCommand;
+import frc.robot.subsystem.drivetrain.DrivetrainSubsystem;
 
-public class RobotContainer
-{
+public class RobotContainer {
+
     public RobotContainer()
     {
-        // Configure the trigger bindings
-        configureBindings();
-    }
-    
-    
-    /** Use this method to define your trigger->command mappings. */
-    private void configureBindings()
-    {
+        DriverStation.silenceJoystickConnectionWarning(true);
+
+        IO.Initialize();
+
+        DrivetrainSubsystem.getInstance().setDefaultCommand(new DriveCommand());
+//        VisionSubsystem.getInstance();
 
     }
-    
-    
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
+
     public Command getAutonomousCommand()
     {
-        // TODO: Implement properly
         return null;
     }
 }

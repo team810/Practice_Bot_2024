@@ -1,8 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import com.revrobotics.REVPhysicsSim;
@@ -12,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import org.littletonrobotics.junction.LoggedRobot;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
-import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 public class Robot extends LoggedRobot
 {
@@ -25,7 +19,7 @@ public class Robot extends LoggedRobot
     {
         Logger.recordMetadata("ProjectName", "Off_season"); // Set a metadata value
         if (isReal()) {
-            Logger.addDataReceiver(new WPILOGWriter("/media/sda1/")); // Log to a USB stick
+
             Logger.addDataReceiver(new NT4Publisher());
         } else {
             Logger.addDataReceiver(new NT4Publisher());

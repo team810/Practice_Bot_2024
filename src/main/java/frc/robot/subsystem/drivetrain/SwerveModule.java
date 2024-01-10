@@ -91,11 +91,6 @@ class SwerveModule {
 
         double speedOfMotorRPM = (state.speedMetersPerSecond / DrivetrainConstants.DISTANCE_PER_REVOLUTION) * 60 * DrivetrainConstants.GEAR_REDUCTION_DRIVE;
 
-        if (details.module == SwerveModuleEnum.frontRight && Robot.isReal())
-        {
-            speedOfMotorRPM = speedOfMotorRPM * -1;
-        }
-
         module.setDriveVoltage(
                 driveController.calculate(module.getWheelVelocity(), speedOfMotorRPM)
         );

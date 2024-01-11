@@ -1,13 +1,12 @@
 package frc.robot.IO;
 
-import edu.wpi.first.wpilibj.XboxController;
 import frc.lib.StadiaController;
 
 import java.util.HashMap;
 import java.util.function.Supplier;
 
 public abstract class IO {
-    private static final XboxController primary = new XboxController(0);
+    private static final StadiaController primary = new StadiaController(0);
     private static final StadiaController secondary = new StadiaController(1);
 
     private static final HashMap<Controls,Supplier<Double>> controlsJoystick = new HashMap<>();

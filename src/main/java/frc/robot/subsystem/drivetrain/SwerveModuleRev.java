@@ -4,8 +4,8 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel;
 import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -25,8 +25,8 @@ class SwerveModuleRev implements SwerveModuleIO {
 	public SwerveModuleRev(SwerveModuleDetails details)
 	{
 
-		drive = new CANSparkMax(details.driveID, CANSparkMaxLowLevel.MotorType.kBrushless);
-		steer = new CANSparkMax(details.steerID, CANSparkMaxLowLevel.MotorType.kBrushless);
+		drive = new CANSparkMax(details.driveID, CANSparkBase.MotorType.kBrushless);
+		steer = new CANSparkMax(details.steerID, CANSparkBase.MotorType.kBrushless);
 
 		drive.restoreFactoryDefaults();
 		steer.restoreFactoryDefaults();
@@ -38,7 +38,7 @@ class SwerveModuleRev implements SwerveModuleIO {
 		this.details = details;
 
 		drive.setSmartCurrentLimit(40);
-		steer.setSmartCurrentLimit(30);
+		steer.setSmartCurrentLimit(20);
 
 		drive.enableVoltageCompensation(12.0);
 		steer.enableVoltageCompensation(12.0);
@@ -58,15 +58,15 @@ class SwerveModuleRev implements SwerveModuleIO {
 	}
 	@Override
 	public void update() {
-		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelVelocity", getWheelVelocity());
-		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/DriveVoltage", driveVoltage);
-		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/DriveAmpDraw", drive.getOutputCurrent());
-		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/DriveTemperature", drive.getMotorTemperature());
+		Logger.recordOutput("Drivetrain/" + details.module.name() + "/WheelVelocity", getWheelVelocity());
+		Logger.recordOutput("Drivetrain/" + details.module.name() + "/DriveVoltage", driveVoltage);
+		Logger.recordOutput("Drivetrain/"+ details.module.name() + "/DriveAmpDraw", drive.getOutputCurrent());
+		Logger.recordOutput("Drivetrain/"+ details.module.name() + "/DriveTemperature", drive.getMotorTemperature());
 
-		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/SteerVoltage", steerVoltage);
-		Logger.getInstance().recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getRadians());
-		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerAmpDraw", drive.getOutputCurrent());
-		Logger.getInstance().recordOutput("Drivetrain/"+ details.module.name() + "/SteerTemperature", steer.getMotorTemperature());
+		Logger.recordOutput("Drivetrain/" + details.module.name() + "/SteerVoltage", steerVoltage);
+		Logger.recordOutput("Drivetrain/" + details.module.name() + "/WheelAngle", getWheelAngle().getRadians());
+		Logger.recordOutput("Drivetrain/"+ details.module.name() + "/SteerAmpDraw", drive.getOutputCurrent());
+		Logger.recordOutput("Drivetrain/"+ details.module.name() + "/SteerTemperature", steer.getMotorTemperature());
 	}
 
     @Override

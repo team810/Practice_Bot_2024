@@ -10,6 +10,7 @@ public class RobotContainer {
 
     public RobotContainer()
     {
+
         DriverStation.silenceJoystickConnectionWarning(true);
 
         IO.Initialize();

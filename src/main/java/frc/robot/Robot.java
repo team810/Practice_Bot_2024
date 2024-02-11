@@ -32,9 +32,11 @@ public class Robot extends LoggedRobot
     @Override
     public void robotPeriodic()
     {
+
         if  (Robot.isSimulation())
         {
             REVPhysicsSim.getInstance().run();
+
         }
         CommandScheduler.getInstance().run();
 

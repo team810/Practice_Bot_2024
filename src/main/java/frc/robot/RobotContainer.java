@@ -16,7 +16,6 @@ public class RobotContainer {
         IO.Initialize();
 
         DrivetrainSubsystem.getInstance().setDefaultCommand(new DriveCommand());
-//        VisionSubsystem.getInstance();
 
     }
 

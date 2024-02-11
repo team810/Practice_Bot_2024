@@ -33,10 +33,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 	private ChassisSpeeds currentSpeeds;
 
-	private ChassisSpeeds targetTeleopSpeeds;
-	private ChassisSpeeds targetAutoSpeeds;
-	private ChassisSpeeds targetAutoAlineSpeeds;
-	private ChassisSpeeds targetTeleopAutoAlineSpeeds;
+	private ChassisSpeeds targetSpeed;
 
 	private final SwerveModule frontLeft;
 	private final SwerveModule frontRight;
@@ -81,10 +78,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 		currentSpeeds = new ChassisSpeeds();
 
-		targetAutoSpeeds = new ChassisSpeeds();
-		targetTeleopSpeeds = new ChassisSpeeds();
-		targetTeleopAutoAlineSpeeds = new ChassisSpeeds();
-		targetAutoAlineSpeeds = new ChassisSpeeds();
+		targetSpeed = new ChassisSpeeds();
 
 		kinematics = KINEMATICS;
 		odometry = new SwerveDriveOdometry(kinematics, navx.getRotation2d(), new SwerveModulePosition[]{frontLeftPosition, frontRightPosition, backLeftPosition, backRightPosition});
@@ -97,30 +91,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	public void periodic() {
 
 
-		ChassisSpeeds targetSpeed;
-
-
-		switch (mode)
-		{
-			case teleop:
-				targetSpeed = targetTeleopSpeeds;
-				break;
-			case teleop_autoAline:
-				targetSpeed = targetTeleopAutoAlineSpeeds;
-				break;
-			case auto:
-				targetSpeed = targetAutoSpeeds;
-				break;
-			case auto_autoAline:
-				targetSpeed = targetAutoAlineSpeeds;
-				break;
-			case telop_auto_turn:
-				targetSpeed = new ChassisSpeeds(targetTeleopSpeeds.vxMetersPerSecond, targetTeleopSpeeds.vyMetersPerSecond,0);
-				break;
-			default:
-				throw new RuntimeException("Triggered a default state, IDK how you did this get help from Matthew, " +
-						"This will be funny when I eventually adjacently make the error");
-		}
 
 		if (RobotState.isDisabled())
 		{
@@ -182,7 +152,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 	public void resetOdometry(Pose2d newPose)
 	{
-
 		frontLeft.resetModulePositions();
 		frontRight.resetModulePositions();
 		backLeft.resetModulePositions();
@@ -217,35 +186,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 	 * @param z rotate input
 	 * This should get values that have already been altered and changed on a scale of -Max speed to Max speed
 	 */
-	public void setTargetTeleopSpeeds(double x, double y, double z)
+	public void setSpeeds(double x, double y, double z)
 	{
-		targetTeleopSpeeds = new ChassisSpeeds(y,x,z);
+		targetSpeed = new ChassisSpeeds(y, x, z);
 	}
 
 	public Pose2d getPose()
 	{
 		return odometry.getPoseMeters();
-	}
-	public void setTargetAutoSpeeds(double x, double y, double z)
-	{
-		targetAutoSpeeds = new ChassisSpeeds(x,y,z);
-	}
-	public void setTargetAutoSpeeds(ChassisSpeeds speeds)
-	{
-		targetAutoSpeeds = speeds;
-	}
-	public void setTargetAutoSpeeds(SwerveModuleState[] states)
-	{
-		targetAutoSpeeds = kinematics.toChassisSpeeds(states);
-	}
-	public ChassisSpeeds getTargetTeleopSpeeds() {
-		return targetTeleopSpeeds;
-	}
-	public void setTargetTeleopSpeeds(ChassisSpeeds mTargetTeleopSpeeds) {
-		targetTeleopSpeeds = mTargetTeleopSpeeds;
-	}
-	public ChassisSpeeds getTargetAutoSpeeds() {
-		return targetAutoSpeeds;
 	}
 
 	public void setSpeedMode(SpeedMode speedMode) {

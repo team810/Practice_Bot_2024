@@ -8,4 +8,7 @@ public enum Controls {
     slowMode,
     normalMode,
     autoTurnPOV,
+
+    intakeFwd,
+    intakeRevs,
 }

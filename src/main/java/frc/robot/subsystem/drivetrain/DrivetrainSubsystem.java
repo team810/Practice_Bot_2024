@@ -17,7 +17,7 @@ import static frc.robot.subsystem.drivetrain.DrivetrainConstants.*;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 	private static final DrivetrainSubsystem INSTANCE = new DrivetrainSubsystem();
-	public static DrivetrainSubsystem getInstance() {return INSTANCE;}
+	public static DrivetrainSubsystem getInstance() { return INSTANCE;}
 
 	private DrivetrainMode mode;
 
@@ -89,8 +89,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
 	@Override
 	public void periodic() {
-
-
 
 		if (RobotState.isDisabled())
 		{

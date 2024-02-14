@@ -89,7 +89,7 @@ class SwerveModuleRev implements SwerveModuleIO {
 	@Override
 	public void setSteerVoltage(double voltage) {
 		steerVoltage = MathUtil.clamp(voltage, -1, 1);
-		steerVoltage = -1 * steerVoltage;
+		steerVoltage = steerVoltage;
 		steer.set(steerVoltage);
 	}
 

@@ -64,9 +64,9 @@ public class DriveCommand extends Command {
 		}
 
 		DrivetrainSubsystem.getInstance().setSpeeds(
-				x,
+				-x,
 				y,
-				theta
+				-theta
 		);
 
 		if (IO.getButtonValue(Controls.reset_gyro).get())

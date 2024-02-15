@@ -26,6 +26,10 @@ public abstract class IO {
 
         controlsButtons.put(Controls.intakeFwd, secondary::getAButton);
         controlsButtons.put(Controls.intakeRevs, secondary::getYButton);
+
+        controlsButtons.put(Controls.intakeFire, secondary::getXButton);
+
+        controlsButtons.put(Controls.shooterFire, secondary::getYButton);
     }
 
     public static Supplier<Double> getJoystickValue(Controls control)

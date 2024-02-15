@@ -4,19 +4,22 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystem.intake.IntakeSubsystem;
 
 
-public class IntakeRevsCommand extends Command {
+public class FireCommand extends Command {
 
-    public IntakeRevsCommand() {
+    public FireCommand() {
 
         addRequirements(IntakeSubsystem.getInstance());
+
     }
 
     @Override
     public void initialize() {
 
-        IntakeSubsystem.getInstance().setState(IntakeSubsystem.IntakeState.revs);
+        IntakeSubsystem.getInstance().setState(IntakeSubsystem.IntakeState.fire);
 
     }
+
+
 
     @Override
     public void end(boolean interrupted) {

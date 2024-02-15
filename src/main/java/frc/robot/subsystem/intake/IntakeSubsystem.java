@@ -47,6 +47,10 @@ public class IntakeSubsystem extends SubsystemBase {
                 topMotor.set(0);
                 bottomMotor.set(0);
             }
+            case fire ->{
+                topMotor.set(.25);
+                bottomMotor.set(-.25);
+            }
         }
     }
 
@@ -62,7 +66,8 @@ public class IntakeSubsystem extends SubsystemBase {
     {
         fwd,
         revs,
-        off
+        off,
+        fire
     }
 
 }

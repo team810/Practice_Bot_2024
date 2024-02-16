@@ -83,6 +83,9 @@ public class ShooterSubsystem extends SubsystemBase {
                             shooter.getBottomRPM(),
                             bottomTargetRPM
                     );
+
+                    shooter.setTopVoltage(topVoltage);
+                    shooter.setBottomVoltage(bottomVoltage);
                 }
                 case Off -> {
                     topTargetRPM = 0;
@@ -90,10 +93,16 @@ public class ShooterSubsystem extends SubsystemBase {
 
                     topController.reset();
                     bottomController.reset();
+
+                    shooter.setTopVoltage(0);
+                    shooter.setBottomVoltage(0);
+                    System.out.println("Off");
                 }
             }
 
         }
+
+        shooter.update();
     }
 
 

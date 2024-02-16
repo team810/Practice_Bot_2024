@@ -1,6 +1,7 @@
 package frc.robot.subsystem.intake;
 
 
+import com.revrobotics.CANSparkBase;
 import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -19,12 +20,15 @@ public class IntakeSubsystem extends SubsystemBase {
     private final CANSparkMax topMotor;
 
     private IntakeState state;
-    private static final double INTAKE_SPEED = .75;
+    private static final double INTAKE_SPEED = .5;
 
 
     private IntakeSubsystem() {
         bottomMotor = new CANSparkMax(9, CANSparkLowLevel.MotorType.kBrushless);
         topMotor = new CANSparkMax(10, CANSparkLowLevel.MotorType.kBrushless);
+
+        topMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        bottomMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
 
         topMotor.setInverted(true);
         state = IntakeState.off;
@@ -48,8 +52,8 @@ public class IntakeSubsystem extends SubsystemBase {
                 bottomMotor.set(0);
             }
             case fire ->{
-                topMotor.set(.25);
-                bottomMotor.set(-.25);
+                topMotor.set(.7);
+                bottomMotor.set(.7);
             }
         }
     }

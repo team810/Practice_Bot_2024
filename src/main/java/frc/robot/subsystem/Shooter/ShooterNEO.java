@@ -71,4 +71,10 @@ public class ShooterNEO implements ShooterIO{
     public double getBottomRPM() {
         return bottomEncoder.getVelocity();
     }
+
+    @Override
+    public void update() {
+        topMotor.set(topVoltage);
+        bottomMotor.set(bottomVoltage);
+    }
 }

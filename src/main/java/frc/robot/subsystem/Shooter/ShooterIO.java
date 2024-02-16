@@ -10,4 +10,6 @@ public interface ShooterIO {
     double getTopRPM();
     double getBottomRPM();
 
+    void update();
+
 }
